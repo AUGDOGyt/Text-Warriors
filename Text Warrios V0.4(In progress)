@@ -1,12 +1,11 @@
 import math
 import random
 
-global playerHealth
 playerHealth=100
 
-print("Welcome to beta version 0.3!")
-print("Beta version 0.3 has brought some very big updates to the game!!")
-print("3 new weapon types, 2 new attributes and 2 new materials have been added!")
+print("Welcome to beta version 0.4!")
+print("Beta version 0.4 has brought some very big updates to the game!!")
+print("10 new rooms have been added and the combat system has been very developed")
 print("You can expect the full combat system and even more rooms in the following beta releases.")
 print("I hope you enjoy exploring the world as it is now!")
 print("-AUG__DOG")
@@ -166,43 +165,43 @@ weaponType=items
 class material:
   class wooden:
     damage=+5
-    block=+5
-    magicDamage=+2
+    block=+3
+    magicDamage=+6
     itemID="Wooden "
-    itemIDL="Fire Hardened Wood"
+    itemIDL="Fire Hardened Wood "
   woodenQuality=wooden()
   class stone:
     damage=+8
     block=+5
-    magicDamage=+1
-    itemID="stone "
-    itemiD="Quartz Hardened Stone "
+    magicDamage=+8
+    itemID="Stone "
+    itemIDL="Quartz Hardened Stone "
   stoneQuality=stone()
   class bronze:
     damage=+10
     block=+4
-    magicDamage=+0
+    magicDamage=+5
     itemID="Bronze "
-    itemIDL="Greek Bronze"
+    itemIDL="Greek Bronze "
   bronzeQuality=bronze()
   class iron:
     damage=+15
     block=+7
-    magicDamage=+3
+    magicDamage=+5
     itemID="Iron "
     itemIDL="Reinforced Iron "
   ironQuality=iron()
   class steel:
     damage=+13
     block=+6
-    magicDamage=+2
-    itemID="Steel"
-    itemiDL="Hardened Steel"
+    magicDamage=+3
+    itemID="Steel "
+    itemIDL="Hardened Steel "
   steelQuality=steel()
   class mythril:
     damage=+16
     block=+10
-    magicDamage=+14
+    magicDamage=+18
     itemID="Mythril "
     itemIDL="Compressed Mythril "
   mythrilQuality=mythril()
@@ -237,12 +236,14 @@ class attributes:
     blcModifier=-(random.randrange(3,10))
     mgcModifier=-(random.randrange(1,5))
     itemID="Silent "
+    itemIDL="Streamlined "
   silentQuality=silent()
   class rusty:
     dmgModifier=+(random.randrange(2,6)-random.randrange(1,4))
     blcModifier=-(random.randrange(4,10))
     mgcModifier=-(random.randrange(1,2))
     itemID="Rusty "
+    itemIDL="Bloodstained "
   rustyQuality=rusty()
 
 attributesList=attributes()
@@ -270,7 +271,6 @@ def weaponRandomizer():
   global diceRollL
   diceRollL=random.randrange(1,100)
   while weaponCounter<weaponCount:
-      
     weaponMaterial=random.choice(materialChoice)
     weaponAttribute=random.choice(attributeChoice)
     weaponType=random.choice(weaponChoice)
@@ -283,6 +283,12 @@ def weaponRandomizer():
     itemBlock=(weaponType.itemBlock+weaponMaterial.block+weaponAttribute.blcModifier) 
     itemMagic=(weaponType.itemMagicDamage+weaponMaterial.magicDamage+weaponAttribute.mgcModifier)
     print (weaponID)
+    if diceRollL>=95:
+      lgndMdf=+(random.randrange(8,40))
+      itemAttack=itemAttack+lgndMdf
+      itemBlock=itemBlock+lgndMdf
+      itemMagic=itemMagic+lgndMdf
+      print("The items damage is",)
     print("The items damage is", itemAttack)
     print("The items block is", itemBlock)
     print("The items magic damage is", itemMagic)
@@ -377,6 +383,11 @@ class enemies:
     health=60
     armorClass=10
     magicMDf=weaponMagic*0.9
+  class troll:
+    damage=50
+    health=120
+    armorClass=20
+    magicMdf=weaponMagic*1.5
 enemyStats=enemies()
 
 class combatLoops():
@@ -391,7 +402,7 @@ class combatLoops():
     while combatLoop=="True":
       if enemyInitiative >= playerInitiative:
         print("the skeleton swings at you")
-        enemyDamageDealt=(.5*weaponBlock)-enemyAttack
+        enemyDamageDealt=(.2*weaponBlock)-enemyAttack
         print("The skeleton deals ",enemyDamageDealt)
         playerHealth=playerHealth-enemyDamageDealt
         print("You now have ",playerHealth, "health")
@@ -475,19 +486,30 @@ def betweenRoom():
         print("You drink a health potion")
         healthRecovered=random.randrange(1,6)
         print("You recover", healthRecovered, "health")
-        
+        playerHealth=playerHealth+healthrecovered
       else:
         print("You decide to pack up and move onto the next room")
         print("")
+    decision1=str(input("Do you wish to check your inventory?"))
+    if decision1=="yes" or "Yes" or "ye" or "Yeah" or "yeah":
+      print("You decide to check your equipment")
+      print(weaponName)
+      print("Your weapons attack is ",weaponAttack)
+      print("Your weapons block is ",weaponBlock)
+      print("And your weapons magic is ",weaponMagic)
     if diceRoll<3:
       print("You hear bone rattling echoing throughout the halls")
       print("You rush to your feet as skeletons round the corner")
       print("")
       combatLoops.comatLoopskele()
-  if decision=="no" or decision=="No":
+  elif decision=="no" or decision=="No":
     print("You decide to move onto the next room")
     print("")
   return
+
+while initialize==5:
+  lootGen()
+  
 
 def worldGen():
   roomSelector=["SkellyScare","ToxicChamber","MimicRoom","LootRoom","SpikeTrap"]
@@ -582,7 +604,37 @@ def worldGen():
                 riddleSelection=["River","Troll","Death"]
                 riddleSelected=random.riddleSelection
                 print (riddleSelected)
-          
+                print("You enter into a large cavern")
+                print("A troll sits on the other end guarding a gate")
+                print("The troll looks at you intently before speaking")
+                print("Troll: answer my riddle and you can pass")
+                print("Get it wrong and die")
+                print("")
+                proceed=" "
+                proceed=str(input("Proceed?"))
+                if proceed !=" ":
+                  if riddleSelected=="River":
+                    print("I run but never stop")
+                    print("I have a bed but never sleep")
+                    print("What am I?")
+                    answer=str(input("Answer: "))
+                    print("")
+                    if answer=="a river" or "A river" or "A River" or "river" or "River":
+                      print("Troll: Good job")
+                      print("Lets hope we dont cross paths again")
+                      print(" ")
+                      lootGen()
+                      inbetweenRoom()
+                    elif answer !="a river" or "A river" or "A River" or "river" or "River":
+                      print("Troll: too bad")
+                      print("I was looking forward to eating you anyways")
+                      #comatLoopTroll()
+                      lootGen()
+                      inbetweenRoom()
+                  elif riddleSelected=="Troll":
+                    print("troll")
+                  elif riddleSelected=="Death":
+                    print("Death")
   return
 worldGen()
 def gameLoop():
