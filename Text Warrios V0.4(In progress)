@@ -218,7 +218,7 @@ class attributes:
     itemIDL="Shattered"
   brokenQuality=broken()
   class hellforged:
-    dmgModifier=+(random.randrange(4,15))
+    dmgModifier=+(random.randrange(8,32))
     blcModifier=+(random.randrange(4,15))
     mgcModifier=+(random.randrange(5,20))
     itemID="Hellforged "
@@ -245,7 +245,11 @@ class attributes:
     itemID="Rusty "
     itemIDL="Bloodstained "
   rustyQuality=rusty()
-
+  class hardened:
+    dmgMdofier=+(random.randrange(5,30))
+    blcModifier=+(random.randrange(4,20))
+    mgcModifier=-(random.randrange(5,30))
+    itemID="Hardened "
 attributesList=attributes()
 weaponAttribute=attributes()
 attributeChoice=[attributesList.hellforgedQuality,attributesList.thornQuality,attributesList.brokenQuality,attributesList.silentQuality,attributesList.rustyQuality]
@@ -507,10 +511,6 @@ def betweenRoom():
     print("")
   return
 
-while initialize==5:
-  lootGen()
-  
-
 def worldGen():
   roomSelector=["SkellyScare","ToxicChamber","MimicRoom","LootRoom","SpikeTrap"]
   roomSelected=random.choice(roomSelector)
@@ -624,13 +624,13 @@ def worldGen():
                       print("Lets hope we dont cross paths again")
                       print(" ")
                       lootGen()
-                      inbetweenRoom()
+                      betweenRoom()
                     elif answer !="a river" or "A river" or "A River" or "river" or "River":
                       print("Troll: too bad")
                       print("I was looking forward to eating you anyways")
                       #comatLoopTroll()
                       lootGen()
-                      inbetweenRoom()
+                      betweenRoom()
                   elif riddleSelected=="Troll":
                     print("troll")
                   elif riddleSelected=="Death":
