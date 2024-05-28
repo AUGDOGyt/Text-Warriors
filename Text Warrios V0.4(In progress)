@@ -1,7 +1,16 @@
 import math
 import random
 
-playerHealth=100
+class gameStats:
+  global enemiesKilled
+  global playerHealth
+  global hpGained
+  global damageAbsorbed
+  enemiesKilled=0
+  playerHealth=100
+  hpGained=0
+  damageAbsorbed=0
+  gold=0
 
 print("Welcome to beta version 0.4!")
 print("Beta version 0.4 has brought some very big updates to the game!!")
@@ -14,8 +23,14 @@ print(" ")
 def gameEnd():
   print("So this is how it ends")
   print("You had a good run")
+  print("")
   initialize=4
   #display game stats here
+  print("You killed ",enemiesKilled)
+  print("Your final health was ",playerHealth)
+  print("Throughout your adventure you recovered ",hpGained," health")
+  print("And you took ",damageAbsorbed," damage")
+  print("You earned ",gold," gold")
 
 def tutorial():
   print("Old man: Welcome brave adventurer")
@@ -85,15 +100,15 @@ def tutorial():
 start=" "
 start=input("Are you ready to start?")
 if start !=" ":
-  print("")
-  print("Welcome to The Dominion of Arkuneg")
-  print("")
-  tutorial()
-elif start=="no" or start=="No":
-  print("")
-  print("Welcome to The Dominion of Arkuneg")
-  print("")
-  tutorial()
+  if start=="dev":
+    print("skipped")
+    print("")
+  else:
+    print("")
+    print("Welcome to The Dominion of Arkuneg")
+    print("")
+    tutorial()
+
 initialize=5
 global gold
 gold=50
@@ -114,7 +129,7 @@ class items:
     itemBlock=0
     itemMagicDamage=1
     itemID="Bow"
-    itemiDL="Elven Long Bow"
+    itemIDL="Elven Long Bow"
   bowStat=bow()
   class claymore:
     itemDamage=20
@@ -215,10 +230,10 @@ class attributes:
     blcModifier=-(random.randrange(1,10))
     mgcModifier=-(random.randrange(1,2))
     itemID="Broken "
-    itemIDL="Shattered"
+    itemIDL="Shattered "
   brokenQuality=broken()
   class hellforged:
-    dmgModifier=+(random.randrange(8,32))
+    dmgModifier=+(random.randrange(4,15))
     blcModifier=+(random.randrange(4,15))
     mgcModifier=+(random.randrange(5,20))
     itemID="Hellforged "
@@ -245,11 +260,7 @@ class attributes:
     itemID="Rusty "
     itemIDL="Bloodstained "
   rustyQuality=rusty()
-  class hardened:
-    dmgMdofier=+(random.randrange(5,30))
-    blcModifier=+(random.randrange(4,20))
-    mgcModifier=-(random.randrange(5,30))
-    itemID="Hardened "
+
 attributesList=attributes()
 weaponAttribute=attributes()
 attributeChoice=[attributesList.hellforgedQuality,attributesList.thornQuality,attributesList.brokenQuality,attributesList.silentQuality,attributesList.rustyQuality]
@@ -348,7 +359,6 @@ def lootGen():
   return
 
 def initialization():
-  global equippedWeapon
   global playerHealth
   playerHealth=100
   print("And one more thing adventurer")
@@ -439,7 +449,12 @@ class combatLoops():
         decision=str(input("proceed?"))
         print("")
         if decision !=" ":
-          print("under construction")
+          print("the skeleton swings at you")
+          enemyDamageDealt=(.2*weaponBlock)-enemyAttack
+          print("The skeleton deals ",enemyDamageDealt)
+          playerHealth=playerHealth-enemyDamageDealt
+          print("You now have ",playerHealth, "health")
+          print("")
         if playerHealth==0:
           combatLoop="False"
           gameEnd()
@@ -449,8 +464,58 @@ class combatLoops():
             combatLoop="False"
             
     return
-  def comatLoopzom():
-    print("balls")
+  def comatLoopZom():
+    enemyHealth=enemyStats.zombie.health
+    enemyAttack=enemyStats.zombie.damage
+    enemyArmor=enemyStats.zombie.armorClass
+    enemyMgcRes=enemyStats.zombie.magicMdf
+    enemyInitiative=random.randrange(1,20)
+    playerInitiative=random.randrange(1,20)
+    combatLoop="True"
+    while combatLoop=="True":
+      if enemyInitiative >= playerInitiative:
+        print("the zombie swings at you")
+        enemyDamageDealt=(.2*weaponBlock)-enemyAttack
+        print("The zombie deals ",enemyDamageDealt)
+        playerHealth=playerHealth-enemyDamageDealt
+        print("You now have ",playerHealth, "health")
+        print("")
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("You strike back at the zombie")
+          damageDealt=weaponAttack-enemyArmor
+          mgcDamageDealth=weaponMagic*enemyMgcRes
+          print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+          decision=" "
+          decision=str(input("proceed?"))
+          print("")
+        if decision !=" ":
+          if playerHealth==0:
+            combatLoop="False"
+            gameEnd()
+          else:
+            if enemyHealth==0:
+              print("You win!")
+              combatLoop="False"
+      else:
+        print("You ready to attack the zombie")
+        damageDealt=weaponAttack-enemyArmor
+        mgcDamageDealt=weaponMagic*enemyMgcRes
+        print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("under construction")
+        if playerHealth==0:
+          combatLoop="False"
+          gameEnd()
+        else:
+          if enemyHealth==0:
+            print("You won!")
+            combatLoop="False"
     return
   def comatLoopspid():
     print("balls")
@@ -528,7 +593,7 @@ def worldGen():
         print("Your nostrils are assaulted with a foul stench")
         print("Suddenly an undead rises from the dust and attacks you")
         print(" ")
-        print("(combat system inserted here)")
+        combatLoops.comatLoopZom()
         lootGen()
         betweenRoom()
       else:
@@ -624,21 +689,22 @@ def worldGen():
                       print("Lets hope we dont cross paths again")
                       print(" ")
                       lootGen()
-                      betweenRoom()
+                      inbetweenRoom()
                     elif answer !="a river" or "A river" or "A River" or "river" or "River":
                       print("Troll: too bad")
                       print("I was looking forward to eating you anyways")
                       #comatLoopTroll()
                       lootGen()
-                      betweenRoom()
+                      inbetweenRoom()
                   elif riddleSelected=="Troll":
                     print("troll")
                   elif riddleSelected=="Death":
                     print("Death")
   return
-worldGen()
+
 def gameLoop():
   worldGen()
   return
+
 while initialize==5:
   gameLoop()
