@@ -173,6 +173,55 @@ class items:
     itemID="Mace"
     itemIDL="Bloodied Mace"
   maceStats=mace()
+  class throwingSpear:
+    itemDamage=14
+    itemBlock=2
+    itemMagicDamage=2
+    itemID="Throwing Spear "
+    itemIDL="Spartan Javelin "
+  spearStats=throwingSpear()
+  class butterKnife:
+    itemDamage=8
+    itemBlock=1
+    itemMagicDamage=0
+    itemID="Butter Knife "
+    itemIDL="Biscuit Splitter "
+  knifeStats=butterKnife()
+  class spoon:
+    itemDamage=1
+    itemBlock=0
+    itemMagic=30
+    itemID="Spoon"
+    itemIDL="Spoon of Destiny"
+  spoonStats=spoon()
+  class katana:
+    itemDamage=15
+    itemBlock=10
+    itemMagic=5
+    itemID="Katana"
+    itemIDL="Legendary Samurais Blade"
+  katanaStats=katana()
+  class throwingAxe:
+    itemDamage=16
+    itemBlock=2
+    itemMagic=4
+    itemID="Throwing Axe"
+    itemIDL="Viking Throwing Axe"
+  throwAxeStates=throwingAxe()
+  class warAxe:
+    itemDamage=18
+    itemBlock=6
+    itemMagic=5
+    itemID="War Axe"
+    itemIDL="Viking War Axe"
+  warAxeStats=warAxe()
+  class greatAxe:
+    itemDamage=22
+    itemBlock=10
+    itemMagic=8
+    itemID="Great Axe"
+    itemIDL="Viking Great Axe"
+  greatAxeStats=greatAxe()
   
 itemList=items()
 weaponType=items
@@ -207,19 +256,27 @@ class material:
     itemIDL="Reinforced Iron "
   ironQuality=iron()
   class steel:
-    damage=+13
+    damage=+18
     block=+6
     magicDamage=+3
     itemID="Steel "
     itemIDL="Hardened Steel "
   steelQuality=steel()
   class mythril:
-    damage=+16
+    damage=+20
     block=+10
     magicDamage=+18
     itemID="Mythril "
     itemIDL="Compressed Mythril "
   mythrilQuality=mythril()
+  class tungsten:
+    damage=+17
+    block=+8
+    magicDamage=+4
+    itemID="Tungsten "
+    itemIDL="Reinforced Tungsten "
+  tungstenQuality=tungsten()
+  class 
   
 materialList=material()
 weaponMaterial=material()
@@ -266,6 +323,7 @@ weaponAttribute=attributes()
 attributeChoice=[attributesList.hellforgedQuality,attributesList.thornQuality,attributesList.brokenQuality,attributesList.silentQuality,attributesList.rustyQuality]
 weaponChoice=[itemList.sword,itemList.bow,itemList.claymore,itemList.staff,itemList.dagger]
 materialChoice=[materialList.woodenQuality,materialList.stoneQuality,materialList.bronzeQuality,materialList.ironQuality,materialList.steelQuality,materialList.mythrilQuality]
+legendaryName=["Arkuneg's","Josiahs's","Aug's","Belakor's","Art3mis's","Bob's","Lucifer's"]
 
 class startingWeapon():
   equippedWeapon=materialList.wooden.itemID, itemList.sword.itemID
@@ -289,16 +347,16 @@ def weaponRandomizer():
     weaponMaterial=random.choice(materialChoice)
     weaponAttribute=random.choice(attributeChoice)
     weaponType=random.choice(weaponChoice)
-    if diceRollL>=95:
-      weaponID=weaponAttribute.itemIDL+weaponMaterial.itemIDL+weaponType.itemIDL
+    if diceRollL>=98:
+      weaponID=legendaryName+weaponAttribute.itemIDL+weaponMaterial.itemIDL+weaponType.itemIDL
       legendaryItem="True"
-    elif diceRollL<95:
+    elif diceRollL<98:
       weaponID=weaponAttribute.itemID+ weaponMaterial.itemID+ weaponType.itemID
     itemAttack=(weaponType.itemDamage+weaponMaterial.damage+weaponAttribute.dmgModifier)
     itemBlock=(weaponType.itemBlock+weaponMaterial.block+weaponAttribute.blcModifier) 
     itemMagic=(weaponType.itemMagicDamage+weaponMaterial.magicDamage+weaponAttribute.mgcModifier)
     print (weaponID)
-    if diceRollL>=95:
+    if diceRollL>=98:
       lgndMdf=+(random.randrange(8,40))
       itemAttack=itemAttack+lgndMdf
       itemBlock=itemBlock+lgndMdf
@@ -340,7 +398,7 @@ def equipNewLegen():
 def lootGen():
   print("You found a ")
   weaponRandomizer()
-  if diceRollL>=95:
+  if diceRollL>=98:
       decision=str(input("Would you like to pick up this weapon? "))
       if decision=="yes" or decision=="Yes":
         print("You pickup the new weapon, it feels good as you toss it from hand to hand")
@@ -349,7 +407,7 @@ def lootGen():
       elif decision=="no" or decision=="No":
         print("You decide to leave it there")
         print("")
-  elif diceRollL<95:
+  elif diceRollL<98:
     decision=str(input("Would you like to pick up this weapon? "))
     if decision=="yes" or decision=="Yes":
       print("You pickup the new weapon, it feels good as you toss it from hand to hand")
@@ -709,6 +767,11 @@ def worldGen():
   return
 
 def gameLoop():
+  worldGen()
+  return
+
+while initialize==5:
+  gameLoop()
   worldGen()
   return
 
