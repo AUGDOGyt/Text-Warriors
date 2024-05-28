@@ -276,7 +276,9 @@ class material:
     itemID="Tungsten "
     itemIDL="Reinforced Tungsten "
   tungstenQuality=tungsten()
-  class 
+  class filler:
+    filler="filler"
+  fillerStats=filler()
   
 materialList=material()
 weaponMaterial=material()
@@ -490,6 +492,7 @@ class combatLoops():
           damageDealt=weaponAttack-(random.randrange(0.1,0.8)*enemyArmor)
           mgcDamageDealth=weaponMagic*enemyMgcRes
           print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+          enemyHealth=enemyHealth-((0.2*damageDealt)+(0.2*mgcDamageDealt))
           decision=" "
           decision=str(input("proceed?"))
           print("")
@@ -526,57 +529,7 @@ class combatLoops():
             
     return
   def comatLoopZom():
-    enemyHealth=enemyStats.zombie.health
-    enemyAttack=enemyStats.zombie.damage
-    enemyArmor=enemyStats.zombie.armorClass
-    enemyMgcRes=enemyStats.zombie.magicMdf
-    enemyInitiative=random.randrange(1,20)
-    playerInitiative=random.randrange(1,20)
-    combatLoop="True"
-    while combatLoop=="True":
-      if enemyInitiative >= playerInitiative:
-        print("the zombie swings at you")
-        enemyDamageDealt=((random.randrange(0.1,0.6))*weaponBlock)-enemyAttack
-        print("The zombie deals ",enemyDamageDealt)
-        playerHealth=playerHealth-enemyDamageDealt
-        print("You now have ",playerHealth, "health")
-        print("")
-        decision=" "
-        decision=str(input("proceed?"))
-        print("")
-        if decision !=" ":
-          print("You strike back at the zombie")
-          damageDealt=weaponAttack-enemyArmor
-          mgcDamageDealth=weaponMagic*enemyMgcRes
-          print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
-          decision=" "
-          decision=str(input("proceed?"))
-          print("")
-        if decision !=" ":
-          if playerHealth==0:
-            combatLoop="False"
-            gameEnd()
-          else:
-            if enemyHealth==0:
-              print("You win!")
-              combatLoop="False"
-      else:
-        print("You ready to attack the zombie")
-        damageDealt=weaponAttack-enemyArmor
-        mgcDamageDealt=weaponMagic*enemyMgcRes
-        print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
-        decision=" "
-        decision=str(input("proceed?"))
-        print("")
-        if decision !=" ":
-          print("under construction")
-        if playerHealth==0:
-          combatLoop="False"
-          gameEnd()
-        else:
-          if enemyHealth==0:
-            print("You won!")
-            combatLoop="False"
+    print("in progress")
     return
   def comatLoopspid():
     print("balls")
@@ -773,7 +726,9 @@ def gameLoop():
 while initialize==5:
   gameLoop()
   worldGen()
-  return
+
+while initialize==5:
+  gameLoop()
 
 while initialize==5:
   gameLoop()
