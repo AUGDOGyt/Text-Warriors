@@ -324,6 +324,8 @@ def equipNewStart():
   global weaponAttack
   global weaponBlock
   global weaponMagic
+  global weaponName
+  weaponName="Wooden Sword"
   weaponAttack=5
   weaponBlock=3
   weaponMagic=2
@@ -406,6 +408,7 @@ enemyStats=enemies()
 
 class combatLoops():
   def comatLoopskele():
+    global playerHealth
     enemyHealth=enemyStats.skeleton.health
     enemyAttack=enemyStats.skeleton.damage
     enemyArmor=enemyStats.skeleton.armorClass
@@ -416,7 +419,7 @@ class combatLoops():
     while combatLoop=="True":
       if enemyInitiative >= playerInitiative:
         print("the skeleton swings at you")
-        enemyDamageDealt=(.2*weaponBlock)-enemyAttack
+        enemyDamageDealt=enemyAttack-(random.randrange(0.1,0.4)*weaponBlock)
         print("The skeleton deals ",enemyDamageDealt)
         playerHealth=playerHealth-enemyDamageDealt
         print("You now have ",playerHealth, "health")
@@ -426,7 +429,7 @@ class combatLoops():
         print("")
         if decision !=" ":
           print("You strike back at the skeleton")
-          damageDealt=weaponAttack-enemyArmor
+          damageDealt=weaponAttack-(random.randrange(0.1,0.8)*enemyArmor)
           mgcDamageDealth=weaponMagic*enemyMgcRes
           print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
           decision=" "
@@ -450,8 +453,8 @@ class combatLoops():
         print("")
         if decision !=" ":
           print("the skeleton swings at you")
-          enemyDamageDealt=(.2*weaponBlock)-enemyAttack
-          print("The skeleton deals ",enemyDamageDealt)
+          enemyDamageDealt=enemyAttack-(.2*weaponBlock)
+          print("The skeleton deals ",enemyDamageDealt," damage")
           playerHealth=playerHealth-enemyDamageDealt
           print("You now have ",playerHealth, "health")
           print("")
@@ -475,7 +478,7 @@ class combatLoops():
     while combatLoop=="True":
       if enemyInitiative >= playerInitiative:
         print("the zombie swings at you")
-        enemyDamageDealt=(.2*weaponBlock)-enemyAttack
+        enemyDamageDealt=((random.randrange(0.1,0.6))*weaponBlock)-enemyAttack
         print("The zombie deals ",enemyDamageDealt)
         playerHealth=playerHealth-enemyDamageDealt
         print("You now have ",playerHealth, "health")
@@ -571,9 +574,10 @@ def betweenRoom():
       print("You rush to your feet as skeletons round the corner")
       print("")
       combatLoops.comatLoopskele()
-  elif decision=="no" or decision=="No":
-    print("You decide to move onto the next room")
-    print("")
+  else:
+    if decision=="no" or decision=="No":
+      print("You decide to move onto the next room")
+      print("")
   return
 
 def worldGen():
@@ -647,6 +651,8 @@ def worldGen():
                   print("However your leg is caught underneath a spike")
                   damageTaken=random.randrange(1,6)
                   print("You take ",damageTaken," damage")
+                  playerHealth=playerHealth-damageTaken
+                  print("You have ",playerHealth," health")
                   print(" ")
                   lootGen()
                   betweenRoom()
