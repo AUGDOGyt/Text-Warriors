@@ -491,8 +491,10 @@ class combatLoops():
           print("You strike back at the skeleton")
           damageDealt=weaponAttack-(random.randrange(0.1,0.8)*enemyArmor)
           mgcDamageDealth=weaponMagic*enemyMgcRes
+          if damageDealt<1:
+            damageDealt=0
           print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
-          enemyHealth=enemyHealth-((0.2*damageDealt)+(0.2*mgcDamageDealt))
+          enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
           decision=" "
           decision=str(input("proceed?"))
           print("")
@@ -508,6 +510,8 @@ class combatLoops():
         print("You ready to attack the skeleton")
         damageDealt=weaponAttack-enemyArmor
         mgcDamageDealt=weaponMagic*enemyMgcRes
+        if damageDealt<1:
+          damageDealt=0
         print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
         decision=" "
         decision=str(input("proceed?"))
@@ -529,7 +533,68 @@ class combatLoops():
             
     return
   def comatLoopZom():
-    print("in progress")
+    global playerHealth
+    enemyHealth=enemyStats.zombie.health
+    enemyAttack=enemyStats.zombie.damage
+    enemyArmor=enemyStats.zombie.armorClass
+    enemyMgcRes=enemyStats.zombie.magicMdf
+    enemyInitiative=random.randrange(1,20)
+    playerInitiative=random.randrange(1,20)
+    combatLoop="True"
+    while combatLoop=="True":
+      if enemyInitiative >= playerInitiative:
+        print("the zombie swings at you")
+        enemyDamageDealt=enemyAttack-weaponBlock
+        print("The zombie deals ",enemyDamageDealt)
+        playerHealth=playerHealth-enemyDamageDealt
+        print("You now have ",playerHealth, "health")
+        print("")
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("You strike back at the zombie")
+          damageDealt=weaponAttack-(random.randrange(0.1,0.8)*enemyArmor)
+          mgcDamageDealth=weaponMagic*enemyMgcRes
+          if damageDealt<1:
+            damageDealt=0
+          print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+          enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
+          decision=" "
+          decision=str(input("proceed?"))
+          print("")
+        if decision !=" ":
+          if playerHealth==0:
+            combatLoop="False"
+            gameEnd()
+          else:
+            if enemyHealth==0:
+              print("You win!")
+              combatLoop="False"
+      else:
+        print("You ready to attack the zombie")
+        damageDealt=weaponAttack-enemyArmor
+        mgcDamageDealt=weaponMagic*enemyMgcRes
+        if damageDealt<1:
+          damageDealt=0
+        print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("the zombie swings at you")
+          enemyDamageDealt=enemyAttack-(.2*weaponBlock)
+          print("The zombie deals ",enemyDamageDealt," damage")
+          playerHealth=playerHealth-enemyDamageDealt
+          print("You now have ",playerHealth, "health")
+          print("")
+        if playerHealth==0:
+          combatLoop="False"
+          gameEnd()
+        else:
+          if enemyHealth==0:
+            print("You won!")
+            combatLoop="False"
     return
   def comatLoopspid():
     print("balls")
@@ -571,15 +636,23 @@ def betweenRoom():
         print("You recover", healthRecovered, "health")
         playerHealth=playerHealth+healthrecovered
       else:
-        print("You decide to pack up and move onto the next room")
-        print("")
-    decision1=str(input("Do you wish to check your inventory?"))
-    if decision1=="yes" or "Yes" or "ye" or "Yeah" or "yeah":
-      print("You decide to check your equipment")
-      print(weaponName)
-      print("Your weapons attack is ",weaponAttack)
-      print("Your weapons block is ",weaponBlock)
-      print("And your weapons magic is ",weaponMagic)
+        decision1=str(input("Do you wish to check your inventory?"))
+        if decision1=="yes" or "Yes" or "ye" or "Yeah" or "yeah":
+          print("You decide to check your equipment")
+          print(weaponName)
+          print("Your weapons attack is ",weaponAttack)
+          print("Your weapons block is ",weaponBlock)
+          print("And your weapons magic is ",weaponMagic)
+        else:
+          print("You decide to pack up and move onto the next room")
+          print("")
+      decision1=str(input("Do you wish to check your inventory?"))
+      if decision1=="yes" or "Yes" or "ye" or "Yeah" or "yeah":
+        print("You decide to check your equipment")
+        print(weaponName)
+        print("Your weapons attack is ",weaponAttack)
+        print("Your weapons block is ",weaponBlock)
+        print("And your weapons magic is ",weaponMagic)
     if diceRoll<3:
       print("You hear bone rattling echoing throughout the halls")
       print("You rush to your feet as skeletons round the corner")
