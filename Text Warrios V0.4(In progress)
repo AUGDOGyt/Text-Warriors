@@ -7,10 +7,43 @@ class gameStats:
   global hpGained
   global damageAbsorbed
   enemiesKilled=0
-  playerHealth=100
+  playerHealth=0
   hpGained=0
   damageAbsorbed=0
   gold=0
+class playerStats:
+  Strength=10
+  Dexterity=10
+  Defense=10
+  Vitality=10
+  Perception=10
+  Intelligence=10
+  Proficency=5
+  Level=1
+  Gold=20
+  weaponName="Wooden Sword"
+  name="John"
+  ###
+  playerProficency=Proficency*.1
+  playerHealth=(playerHealth+(Vitality*10))+playerProficency
+  playerDmgMdf=(Strength*.1)+playerProficency
+  playerDefMdf=(Defense*.1)+playerProficency
+  playerDodgeChance=(Dexterity*.1)+playerProficency
+  playerIntuition=Perception
+  playerMgcMdf=Intelligence+playerProficency
+
+def saveEncrypt():
+  characterList=["a","A","b","B","c","C","d","D","e","E","f","F","g","G","h","H","i","I","j","J","k","K","l","L","m","M","n","N","o","O","p","P","q","Q","r","R","s","S","t","T","u","U","v","V","w","W","x","X","y","Y","z","Z"]
+  encryptionCode=random.choice(characterList)+random.choice(characterList)+random.choice(characterList)+random.choice(characterList)+random.choice(characterList)+random.choice(characterList)+random.choice(characterList)+random.choice(characterList)+random.choice(characterList)
+  encryptionDatabase=["aaaaaa"]
+  
+def save():
+  saveEncrypt()
+  encryptionCode=[playerStats.Strength,playerStats.Dexterity,playerStats.Defense,playerStats.Vitality,playerStats.Perception,playerStats.name,playerStats.Level,playerStats.weaponName,playerStats.Gold]
+  #database()
+  print("You save code is",encryptionCode)
+  
+save()
 
 print("Welcome to beta version 0.4!")
 print("Beta version 0.4 has brought some very big updates to the game!!")
@@ -422,7 +455,6 @@ def lootGen():
 
 def initialization():
   global playerHealth
-  playerHealth=100
   print("And one more thing adventurer")
   name=input("Im afraid I didnt catch your name")
   print("Well then",name)
@@ -459,11 +491,19 @@ class enemies:
     health=60
     armorClass=10
     magicMDf=weaponMagic*0.9
+    itemID="Mimic"
   class troll:
     damage=50
     health=120
     armorClass=20
     magicMdf=weaponMagic*1.5
+    itemID="Troll"
+  class Lich:
+    damage=35
+    health=200
+    armorClass=15
+    magicMdf=weapongMagic*0.5
+    itemID="Lich"
 enemyStats=enemies()
 
 class combatLoops():
@@ -597,10 +637,14 @@ class combatLoops():
             combatLoop="False"
     return
   def comatLoopspid():
-    print("balls")
+    print("Spider")
     return
   def comatLoopmim():
-    print
+    print("Mimic")
+    return
+  def comatLooptroll():
+    print("Troll")
+    return
   
 def enterDun():
   print("You walk away from the old man")
@@ -665,7 +709,7 @@ def betweenRoom():
   return
 
 def worldGen():
-  roomSelector=["SkellyScare","ToxicChamber","MimicRoom","LootRoom","SpikeTrap"]
+  roomSelector=["SkellyScare","ToxicChamber","MimicRoom","LootRoom","SpikeTrap","TrollRiddle","LichCrypt"]
   roomSelected=random.choice(roomSelector)
   if roomSelected in roomSelector:
     if roomSelected=="SkellyScare":
@@ -790,6 +834,14 @@ def worldGen():
                     print("troll")
                   elif riddleSelected=="Death":
                     print("Death")
+              else:
+                if roomSelected=="LichCrypt":
+                  print("You enter a long room")
+                  print("it reeks of rotting flesh")
+                  print("as you move forward several skeletons start to rise from the floor")
+                  comatLoopskele()
+                  print("As the final skeleton drops dead, a tall figure appears behind you")
+                  #comatLoopLich()
   return
 
 def gameLoop():
