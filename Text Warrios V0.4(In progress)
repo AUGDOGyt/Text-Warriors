@@ -7,11 +7,11 @@ class gameStats:
   global hpGained
   global damageAbsorbed
   enemiesKilled=0
-  playerHealth=0
   hpGained=0
   damageAbsorbed=0
   gold=0
 class playerStats:
+  playerHealth=50
   Strength=10
   Dexterity=10
   Defense=10
@@ -32,18 +32,6 @@ class playerStats:
   playerIntuition=Perception
   playerMgcMdf=Intelligence+playerProficency
 
-def saveEncrypt():
-  characterList=["a","A","b","B","c","C","d","D","e","E","f","F","g","G","h","H","i","I","j","J","k","K","l","L","m","M","n","N","o","O","p","P","q","Q","r","R","s","S","t","T","u","U","v","V","w","W","x","X","y","Y","z","Z"]
-  encryptionCode=random.choice(characterList)+random.choice(characterList)+random.choice(characterList)+random.choice(characterList)+random.choice(characterList)+random.choice(characterList)+random.choice(characterList)+random.choice(characterList)+random.choice(characterList)
-  encryptionDatabase=["aaaaaa"]
-  
-def save():
-  saveEncrypt()
-  encryptionCode=[playerStats.Strength,playerStats.Dexterity,playerStats.Defense,playerStats.Vitality,playerStats.Perception,playerStats.name,playerStats.Level,playerStats.weaponName,playerStats.Gold]
-  #database()
-  print("You save code is",encryptionCode)
-  
-save()
 
 print("Welcome to beta version 0.4!")
 print("Beta version 0.4 has brought some very big updates to the game!!")
@@ -53,6 +41,11 @@ print("I hope you enjoy exploring the world as it is now!")
 print("-AUG__DOG")
 print(" ")
 
+def credits():
+  print("Lead Coder and Designer: AUG__DOG")
+  print("Programming Consultant: InfinityLoop")
+  print("Playtester: Fabric, Nightingal3")
+
 def gameEnd():
   print("So this is how it ends")
   print("You had a good run")
@@ -60,10 +53,11 @@ def gameEnd():
   initialize=4
   #display game stats here
   print("You killed ",enemiesKilled)
-  print("Your final health was ",playerHealth)
   print("Throughout your adventure you recovered ",hpGained," health")
   print("And you took ",damageAbsorbed," damage")
   print("You earned ",gold," gold")
+  print("")
+  credits()
 
 def tutorial():
   print("Old man: Welcome brave adventurer")
@@ -466,15 +460,15 @@ initialization()
 
 class enemies:
   class zombie:
-    damage=10
-    health=20
-    armorClass=5
+    damage=10.0
+    health=20.0
+    armorClass=5.0
     magicMdf=weaponMagic*1.2
     itemID="Zombie"
   zombieStats=zombie()
   class skeleton:
-    damage=15
-    health=45
+    damage=15.0
+    health=45.0
     armorClass=15
     magicMdf=weaponMagic*1.4
     itemID="Skeleton"
@@ -482,27 +476,27 @@ class enemies:
   class spiderSwarm:
     damage=1*(random.randrange(2,20))
     health=damage
-    armorClass=0
+    armorClass=0.0
     mgcMdf=weaponMagic*1.2
     itemID="Spider Swarm"
   spiderStats=spiderSwarm()
   class mimic:
-    damage=30
-    health=60
-    armorClass=10
+    damage=30.0
+    health=60.0
+    armorClass=10.0
     magicMDf=weaponMagic*0.9
     itemID="Mimic"
   class troll:
-    damage=50
-    health=120
-    armorClass=20
+    damage=50.0
+    health=120.0
+    armorClass=20.0
     magicMdf=weaponMagic*1.5
     itemID="Troll"
   class Lich:
-    damage=35
-    health=200
-    armorClass=15
-    magicMdf=weapongMagic*0.5
+    damage=35.0
+    health=200.0
+    armorClass=15.0
+    magicMdf=weaponMagic*0.5
     itemID="Lich"
 enemyStats=enemies()
 
@@ -521,7 +515,7 @@ class combatLoops():
         print("the skeleton swings at you")
         enemyDamageDealt=enemyAttack-(random.randrange(0.1,0.4)*weaponBlock)
         print("The skeleton deals ",enemyDamageDealt)
-        playerHealth=playerHealth-enemyDamageDealt
+        playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
         print("You now have ",playerHealth, "health")
         print("")
         decision=" "
@@ -586,7 +580,7 @@ class combatLoops():
         print("the zombie swings at you")
         enemyDamageDealt=enemyAttack-weaponBlock
         print("The zombie deals ",enemyDamageDealt)
-        playerHealth=playerHealth-enemyDamageDealt
+        playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
         print("You now have ",playerHealth, "health")
         print("")
         decision=" "
@@ -625,10 +619,10 @@ class combatLoops():
           print("the zombie swings at you")
           enemyDamageDealt=enemyAttack-(.2*weaponBlock)
           print("The zombie deals ",enemyDamageDealt," damage")
-          playerHealth=playerHealth-enemyDamageDealt
-          print("You now have ",playerHealth, "health")
+          playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+          print("You now have ",playerStats.playerHealth, "health")
           print("")
-        if playerHealth==0:
+        if playerStats.playerHealth==0:
           combatLoop="False"
           gameEnd()
         else:
@@ -669,7 +663,7 @@ def betweenRoom():
   decision=" "
   decision=input("Would you like to rest between rooms?")
   print(" ")
-  if decision=="yes" or "Yes":
+  if decision!="no" or "No":
     print("You decide to stop and rest for a bit before moving on")
     diceRoll=random.randrange(1,20)
     if diceRoll>2:
@@ -679,7 +673,6 @@ def betweenRoom():
         healthRecovered=random.randrange(1,6)
         print("You recover", healthRecovered, "health")
         playerHealth=playerHealth+healthrecovered
-      else:
         decision1=str(input("Do you wish to check your inventory?"))
         if decision1=="yes" or "Yes" or "ye" or "Yeah" or "yeah":
           print("You decide to check your equipment")
@@ -687,9 +680,10 @@ def betweenRoom():
           print("Your weapons attack is ",weaponAttack)
           print("Your weapons block is ",weaponBlock)
           print("And your weapons magic is ",weaponMagic)
-        else:
-          print("You decide to pack up and move onto the next room")
-          print("")
+    else:
+      if decision=="no" or "No":
+        print("You decide to pack up and move onto the next room")
+        print("")
       decision1=str(input("Do you wish to check your inventory?"))
       if decision1=="yes" or "Yes" or "ye" or "Yeah" or "yeah":
         print("You decide to check your equipment")
@@ -709,7 +703,7 @@ def betweenRoom():
   return
 
 def worldGen():
-  roomSelector=["SkellyScare","ToxicChamber","MimicRoom","LootRoom","SpikeTrap","TrollRiddle","LichCrypt"]
+  roomSelector=["SkellyScare","ToxicChamber","MimicRoom","LootRoom","SpikeTrap","TrollRiddle"]
   roomSelected=random.choice(roomSelector)
   if roomSelected in roomSelector:
     if roomSelected=="SkellyScare":
@@ -755,8 +749,12 @@ def worldGen():
             diceRoll=random.randrange(1,20)
             if diceRoll>14:
               print("You notice that some of the stone tiles on the floor appear to have gaps around them")
-              print("You are able to avoid the trapped tiles and progress onto the next room")
-              print(" ")
+              print("")
+              decision=" "
+              decision=input("Are you ready to proceed?")
+              if decision != " ":
+                print("You are able to avoid the trapped tiles and progress onto the next room")
+                print(" ")
               lootGen()
               betweenRoom()
             elif diceRoll<15:
@@ -801,7 +799,7 @@ def worldGen():
             else:
               if roomSelected=="TrollRiddle":
                 riddleSelection=["River","Troll","Death"]
-                riddleSelected=random.riddleSelection
+                riddleSelected=random.choice(riddleSelection)
                 print (riddleSelected)
                 print("You enter into a large cavern")
                 print("A troll sits on the other end guarding a gate")
