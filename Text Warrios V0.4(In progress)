@@ -52,12 +52,13 @@ def gameEnd():
   print("")
   initialize=4
   #display game stats here
-  print("You killed ",enemiesKilled)
+  print("You killed ",enemiesKilled," enemies")
   print("Throughout your adventure you recovered ",hpGained," health")
   print("And you took ",damageAbsorbed," damage")
   print("You earned ",gold," gold")
   print("")
   credits()
+  exit()
 
 def tutorial():
   print("Old man: Welcome brave adventurer")
@@ -217,35 +218,35 @@ class items:
   class spoon:
     itemDamage=1
     itemBlock=0
-    itemMagic=30
+    itemMagicDamage=30
     itemID="Spoon"
     itemIDL="Spoon of Destiny"
   spoonStats=spoon()
   class katana:
     itemDamage=15
     itemBlock=10
-    itemMagic=5
+    itemMagicDamage=5
     itemID="Katana"
     itemIDL="Legendary Samurais Blade"
   katanaStats=katana()
   class throwingAxe:
     itemDamage=16
     itemBlock=2
-    itemMagic=4
+    itemMagicDamage=4
     itemID="Throwing Axe"
     itemIDL="Viking Throwing Axe"
   throwAxeStates=throwingAxe()
   class warAxe:
     itemDamage=18
     itemBlock=6
-    itemMagic=5
+    itemMagicDamage=5
     itemID="War Axe"
     itemIDL="Viking War Axe"
   warAxeStats=warAxe()
   class greatAxe:
     itemDamage=22
     itemBlock=10
-    itemMagic=8
+    itemMagicDamage=8
     itemID="Great Axe"
     itemIDL="Viking Great Axe"
   greatAxeStats=greatAxe()
@@ -303,9 +304,13 @@ class material:
     itemID="Tungsten "
     itemIDL="Reinforced Tungsten "
   tungstenQuality=tungsten()
-  class filler:
-    filler="filler"
-  fillerStats=filler()
+  class adamantium:
+    damage=+19
+    block=+9
+    magicDamage=+10
+    itemID="Adamantium "
+    itemIDL="Dwarven Adamantium "
+  adamantiumQuality=adamantium()
   
 materialList=material()
 weaponMaterial=material()
@@ -314,14 +319,14 @@ class attributes:
   class broken:
     dmgModifier=-(random.randrange(1,10))
     blcModifier=-(random.randrange(1,10))
-    mgcModifier=-(random.randrange(1,2))
+    mgcModifier=+(random.randrange(1,2))
     itemID="Broken "
     itemIDL="Shattered "
   brokenQuality=broken()
   class hellforged:
     dmgModifier=+(random.randrange(4,15))
     blcModifier=+(random.randrange(4,15))
-    mgcModifier=+(random.randrange(5,20))
+    mgcModifier=+(random.randrange(2,10))
     itemID="Hellforged "
     itemIDL="Lavaforged "
   hellforgedQuality=hellforged()
@@ -346,12 +351,19 @@ class attributes:
     itemID="Rusty "
     itemIDL="Bloodstained "
   rustyQuality=rusty()
+  class blessed:
+    dmgModifier=+(random.randrange(1,6))
+    blcModifier=+(random.randrange(1,3))
+    mgcModifier=+(random.randrange(4,20))
+    itemID="Blessed "
+    itemIDL="Holy "
+  blessedQuality=blessed()
 
 attributesList=attributes()
 weaponAttribute=attributes()
-attributeChoice=[attributesList.hellforgedQuality,attributesList.thornQuality,attributesList.brokenQuality,attributesList.silentQuality,attributesList.rustyQuality]
-weaponChoice=[itemList.sword,itemList.bow,itemList.claymore,itemList.staff,itemList.dagger]
-materialChoice=[materialList.woodenQuality,materialList.stoneQuality,materialList.bronzeQuality,materialList.ironQuality,materialList.steelQuality,materialList.mythrilQuality]
+attributeChoice=[attributesList.hellforgedQuality,attributesList.thornQuality,attributesList.brokenQuality,attributesList.silentQuality,attributesList.rustyQuality,attributesList.blessedQuality]
+weaponChoice=[itemList.sword,itemList.bow,itemList.claymore,itemList.staff,itemList.dagger,itemList.halbred,itemList.crossbow,itemList.mace,itemList.throwingSpear,itemList.butterKnife,itemList.spoon,itemList.katana,itemList.throwingAxe,itemList.warAxe,itemList.greatAxe]
+materialChoice=[materialList.woodenQuality,materialList.stoneQuality,materialList.bronzeQuality,materialList.ironQuality,materialList.steelQuality,materialList.mythrilQuality,materialList.adamantiumQuality,materialList.tungstenQuality]
 legendaryName=["Arkuneg's","Josiahs's","Aug's","Belakor's","Art3mis's","Bob's","Lucifer's"]
 
 class startingWeapon():
@@ -412,10 +424,10 @@ def equipNewStart():
   global weaponBlock
   global weaponMagic
   global weaponName
-  weaponName="Wooden Sword"
-  weaponAttack=5
-  weaponBlock=3
-  weaponMagic=2
+  weaponName="Old Wooden Sword"
+  weaponAttack=15
+  weaponBlock=5
+  weaponMagic=6
   
 def equipNewLegen():
   lgndMdf=+(random.randrange(8,40))
@@ -513,17 +525,17 @@ class combatLoops():
     while combatLoop=="True":
       if enemyInitiative >= playerInitiative:
         print("the skeleton swings at you")
-        enemyDamageDealt=enemyAttack-(random.randrange(0.1,0.4)*weaponBlock)
-        print("The skeleton deals ",enemyDamageDealt)
+        enemyDamageDealt=enemyAttack-(0.4*weaponBlock)
+        print("The skeleton deals ",enemyDamageDealt," damage")
         playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
-        print("You now have ",playerHealth, "health")
+        print("You now have ",playerStats.playerHealth, "health")
         print("")
         decision=" "
         decision=str(input("proceed?"))
         print("")
         if decision !=" ":
           print("You strike back at the skeleton")
-          damageDealt=weaponAttack-(random.randrange(0.1,0.8)*enemyArmor)
+          damageDealt=weaponAttack-(0.8*enemyArmor)
           mgcDamageDealth=weaponMagic*enemyMgcRes
           if damageDealt<1:
             damageDealt=0
@@ -533,7 +545,7 @@ class combatLoops():
           decision=str(input("proceed?"))
           print("")
         if decision !=" ":
-          if playerHealth==0:
+          if playerStats.playerHealth==0:
             combatLoop="False"
             gameEnd()
           else:
@@ -554,8 +566,8 @@ class combatLoops():
           print("the skeleton swings at you")
           enemyDamageDealt=enemyAttack-(.2*weaponBlock)
           print("The skeleton deals ",enemyDamageDealt," damage")
-          playerHealth=playerHealth-enemyDamageDealt
-          print("You now have ",playerHealth, "health")
+          playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+          print("You now have ",playerStats.playerHealth, "health")
           print("")
         if playerHealth==0:
           combatLoop="False"
@@ -581,14 +593,14 @@ class combatLoops():
         enemyDamageDealt=enemyAttack-weaponBlock
         print("The zombie deals ",enemyDamageDealt)
         playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
-        print("You now have ",playerHealth, "health")
+        print("You now have ",playerStats.playerHealth, "health")
         print("")
         decision=" "
         decision=str(input("proceed?"))
         print("")
         if decision !=" ":
           print("You strike back at the zombie")
-          damageDealt=weaponAttack-(random.randrange(0.1,0.8)*enemyArmor)
+          damageDealt=weaponAttack-(0.6*enemyArmor)
           mgcDamageDealth=weaponMagic*enemyMgcRes
           if damageDealt<1:
             damageDealt=0
@@ -663,7 +675,7 @@ def betweenRoom():
   decision=" "
   decision=input("Would you like to rest between rooms?")
   print(" ")
-  if decision!="no" or "No":
+  if decision=="yes" or "Yes" or "y":
     print("You decide to stop and rest for a bit before moving on")
     diceRoll=random.randrange(1,20)
     if diceRoll>2:
@@ -680,18 +692,7 @@ def betweenRoom():
           print("Your weapons attack is ",weaponAttack)
           print("Your weapons block is ",weaponBlock)
           print("And your weapons magic is ",weaponMagic)
-    else:
-      if decision=="no" or "No":
-        print("You decide to pack up and move onto the next room")
-        print("")
-      decision1=str(input("Do you wish to check your inventory?"))
-      if decision1=="yes" or "Yes" or "ye" or "Yeah" or "yeah":
-        print("You decide to check your equipment")
-        print(weaponName)
-        print("Your weapons attack is ",weaponAttack)
-        print("Your weapons block is ",weaponBlock)
-        print("And your weapons magic is ",weaponMagic)
-    if diceRoll<3:
+    elif diceRoll<3:
       print("You hear bone rattling echoing throughout the halls")
       print("You rush to your feet as skeletons round the corner")
       print("")
@@ -777,7 +778,7 @@ def worldGen():
                   print("However your leg is caught underneath a spike")
                   damageTaken=random.randrange(1,6)
                   print("You take ",damageTaken," damage")
-                  playerHealth=playerHealth-damageTaken
+                  playerStats.playerHealth=playerStats.playerHealth-damageTaken
                   print("You have ",playerHealth," health")
                   print(" ")
                   lootGen()
@@ -831,7 +832,17 @@ def worldGen():
                   elif riddleSelected=="Troll":
                     print("troll")
                   elif riddleSelected=="Death":
-                    print("Death")
+                    print("I am fast and sudden")
+                    print("But I am too slow to not be undone")
+                    print("What am I?")
+                    print("")
+                    if answer=="death" or "Death":
+                      print("Troll: Good job")
+                      print("Lets hope we cont cross paths again")
+                    elif answer != "death" or "Death":
+                      print("Troll: too bad")
+                      print("I was looking forward to eating you anyways")
+                      #comatLoopTroll()
               else:
                 if roomSelected=="LichCrypt":
                   print("You enter a long room")
