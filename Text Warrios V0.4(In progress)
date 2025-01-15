@@ -4,11 +4,11 @@ import random
 class gameStats:
   global enemiesKilled
   global hpGained
-  global Gold
+  global gold
   enemiesKilled=0
   hpGained=0
   damageAbsorbed=0
-  Gold=0
+  gold=0
 class playerStats:
   playerHealth=50
   Strength=10
@@ -19,7 +19,7 @@ class playerStats:
   Intelligence=10
   Proficency=5
   Level=1
-  gameStats.Gold=20
+  gold=20
   weaponName="Wooden Sword"
   name="John"
   ###
@@ -137,8 +137,6 @@ if start !=" ":
     tutorial()
 
 initialize=5
-global gold
-gold=50
 
 combatState="False"
 
@@ -462,7 +460,13 @@ def initialization():
   global playerHealth
   print("And one more thing adventurer")
   name=input("Im afraid I didnt catch your name")
-  print("Well then",name)
+  if name=="Sky" or "Sky":
+    print("Sky: Welcome back")
+    print("")
+  elif name=="Cocoa" or "cocoa" or "Viktor" or "viktor" or "Viktoria":
+    print("Sky: Welcome :3")
+    print("")
+  print("Old Man: Well then",name)
   print("May the gods be in your favor")
   print("")
   equipNewStart()
@@ -642,6 +646,9 @@ class combatLoops():
           damageDealt=0
         print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
         enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
+        if enemyHealth==0:
+            print("You won!")
+            combatLoop="False"
         decision=" "
         decision=str(input("proceed?"))
         print("")
@@ -651,15 +658,11 @@ class combatLoops():
           print("The zombie deals ",enemyDamageDealt," damage")
           gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
           playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+          if playerStats.playerHealth==0:
+            combatLoop="False"
+            gameEnd()
           print("You now have ",playerStats.playerHealth, "health")
           print("")
-        if playerStats.playerHealth==0:
-          combatLoop="False"
-          gameEnd()
-        else:
-          if enemyHealth==0:
-            print("You won!")
-            combatLoop="False"
     return
   def comatLoopmim():
     global playerHealth
@@ -989,7 +992,7 @@ def betweenRoom():
   return
 
 def worldGen():
-  roomSelector=["SkellyScare","ToxicChamber","MimicRoom","LootRoom","SpikeTrap","TrollRiddle","LichCrypt","SpiderNest"]
+  roomSelector=["SkellyScare","ZombieChamber","MimicRoom","LootRoom","SpikeTrap","TrollRiddle","LichCrypt","SpiderNest"]
   roomSelected=random.choice(roomSelector)
   if roomSelected in roomSelector:
     if roomSelected=="SkellyScare":
@@ -1001,7 +1004,7 @@ def worldGen():
       lootGen()
       betweenRoom()
     else:
-      if roomSelected=="ToxicChamber":
+      if roomSelected=="ZombieChamber":
         print("Your nostrils are assaulted with a foul stench")
         print("Suddenly an undead rises from the dust and attacks you")
         print(" ")
@@ -1109,13 +1112,13 @@ def worldGen():
                       print("Lets hope we dont cross paths again")
                       print(" ")
                       lootGen()
-                      inbetweenRoom()
+                      betweenRoom()
                     elif answer !="a river" or "A river" or "A River" or "river" or "River":
                       print("Troll: too bad")
                       print("I was looking forward to eating you anyways")
                       combatLoops.comatLooptroll()
                       lootGen()
-                      inbetweenRoom()
+                      betweenRoom()
                   elif riddleSelected=="Troll":
                     print("troll")
                   elif riddleSelected=="Death":
@@ -1127,11 +1130,12 @@ def worldGen():
                     if answer=="death" or "Death":
                       print("Troll: Good job")
                       print("Lets hope we cont cross paths again")
-                      inbetweenRoom()
+                      betweenRoom()
                     elif answer != "death" or "Death":
                       print("Troll: too bad")
                       print("I was looking forward to eating you anyways")
                       combatLoops.comatLooptroll()
+                      
               else:
                 if roomSelected=="LichCrypt":
                   print("You enter a long room")
@@ -1139,13 +1143,14 @@ def worldGen():
                   print("as you move forward several skeletons start to rise from the floor")
                   combatLoops.comatLoopskele()
                   print("As the final skeleton drops dead, a tall figure appears behind you")
-                  #comatLoopLich()
+                  comatLoopLich()
+                  betweenRoom()
                 elif roomSelected=="SpiderNest":
                   print("A dark and dry room is ahead of you")
                   print("As you raise your torch you find many spiders staring back at you")
                   combatLoops.comatLoopspiderSwarm()
                   combatLoops.comatLoopspider()
-                  inbetweenRoom()
+                  betweenRoom()
                 elif roomSelected=="GolemChamber":
                   print("A massive room lays before you")
                   print("Massive pillars line the walls")
