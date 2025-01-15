@@ -34,15 +34,14 @@ class playerStats:
 
 print("Welcome to beta version 0.4!")
 print("Beta version 0.4 has brought some very big updates to the game!!")
-print("10 new rooms have been added and the combat system has been very developed")
-print("You can expect the full combat system and even more rooms in the following beta releases.")
+print("5 new rooms have been added and the combat system has been very developed")
+print("You can expect more rooms in the following releases, as well as some new enemies")
 print("I hope you enjoy exploring the world as it is now!")
 print("-AUG__DOG")
 print(" ")
 
 def credits():
-  print("Lead Coder and Designer: AUG__DOG")
-  print("Programming Consultant: InfinityLoop")
+  print("Lead Coder and Designer: Sky")
   print("Playtester: Fabric, Nightingal3")
 
 def gameEnd():
