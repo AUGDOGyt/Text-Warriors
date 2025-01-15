@@ -3,13 +3,12 @@ import random
 
 class gameStats:
   global enemiesKilled
-  global playerHealth
   global hpGained
-  global damageAbsorbed
+  global Gold
   enemiesKilled=0
   hpGained=0
   damageAbsorbed=0
-  gold=0
+  Gold=0
 class playerStats:
   playerHealth=50
   Strength=10
@@ -20,7 +19,7 @@ class playerStats:
   Intelligence=10
   Proficency=5
   Level=1
-  Gold=20
+  gameStats.Gold=20
   weaponName="Wooden Sword"
   name="John"
   ###
@@ -489,14 +488,14 @@ class enemies:
     damage=1*(random.randrange(2,20))
     health=damage
     armorClass=0.0
-    mgcMdf=weaponMagic*0.2
+    magicMdf=weaponMagic*0.2
     itemID="Spider Swarm"
   spiderStats=spiderSwarm()
   class spider:
     damage=20
     health=30
     armorClass=0.0
-    mgcMdf=weaponMagic*1.6
+    magicMdf=weaponMagic*1.6
   class mimic:
     damage=30.0
     health=60.0
@@ -542,7 +541,7 @@ class combatLoops():
         print("the skeleton swings at you")
         enemyDamageDealt=enemyAttack-(0.4*weaponBlock)
         print("The skeleton deals ",enemyDamageDealt," damage")
-        playerStats.damageAbsorbed=playerStats.damageAbsorbed+enemyDamageDealt
+        gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
         playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
         print("You now have ",playerStats.playerHealth, "health")
         print("")
@@ -552,15 +551,11 @@ class combatLoops():
         if decision !=" ":
           print("You strike back at the skeleton")
           damageDealt=weaponAttack-(0.8*enemyArmor)
-          mgcDamageDealth=weaponMagic*enemyMgcRes
+          mgcDamageDealt=weaponMagic*enemyMgcRes
           if damageDealt<1:
             damageDealt=0
           print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
           enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
-          decision=" "
-          decision=str(input("proceed?"))
-          print("")
-        if decision !=" ":
           if playerStats.playerHealth==0:
             combatLoop="False"
             gameEnd()
@@ -582,7 +577,7 @@ class combatLoops():
           print("the skeleton swings at you")
           enemyDamageDealt=enemyAttack-(.2*weaponBlock)
           print("The skeleton deals ",enemyDamageDealt," damage")
-          playerStats.damageAbsorbed=playerStats.damageAbsorbed+enemyDamageDealt
+          gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
           playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
           print("You now have ",playerStats.playerHealth, "health")
           print("")
@@ -611,7 +606,7 @@ class combatLoops():
         print("the zombie swings at you")
         enemyDamageDealt=enemyAttack-weaponBlock
         print("The zombie deals ",enemyDamageDealt)
-        playerStats.damageAbsorbed=playerStats.damageAbsorbed+enemyDamageDealt
+        gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
         playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
         print("You now have ",playerStats.playerHealth, "health")
         print("")
@@ -629,14 +624,16 @@ class combatLoops():
           decision=" "
           decision=str(input("proceed?"))
           print("")
-        if decision !=" ":
-          if playerHealth==0:
+          if playerHealth<=0:
             combatLoop="False"
             gameEnd()
           else:
-            if enemyHealth==0:
+            if enemyHealth<=0:
               print("You win!")
               combatLoop="False"
+        if decision !=" ":
+          print("Continuing")
+          print("")
       else:
         print("You ready to attack the zombie")
         damageDealt=weaponAttack-enemyArmor
@@ -644,6 +641,7 @@ class combatLoops():
         if damageDealt<1:
           damageDealt=0
         print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+        enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
         decision=" "
         decision=str(input("proceed?"))
         print("")
@@ -651,73 +649,7 @@ class combatLoops():
           print("the zombie swings at you")
           enemyDamageDealt=enemyAttack-(.2*weaponBlock)
           print("The zombie deals ",enemyDamageDealt," damage")
-          playerStats.damageAbsorbed=playerStats.damageAbsorbed+enemyDamageDealt
-          playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
-          print("You now have ",playerStats.playerHealth, "health")
-          print("")
-        if playerStats.playerHealth==0:
-          combatLoop="False"
-          gameEnd()
-        else:
-          if enemyHealth==0:
-            print("You won!")
-            combatLoop="False"
-    return
-  def comatLoopspid():
-    global playerHealth
-    enemyHealth=enemyStats.spiderSwarm.health
-    enemyAttack=enemyStats.spiderSwarm.damage
-    enemyArmor=enemyStats.spiderSwarm.armorClass
-    enemyMgcRes=enemyStats.spiderSwarm.magicMdf
-    enemyInitiative=random.randrange(1,20)
-    playerInitiative=random.randrange(1,20)
-    combatLoop="True"
-    while combatLoop=="True":
-      if enemyInitiative >= playerInitiative:
-        print("the spiders bite at you")
-        enemyDamageDealt=enemyAttack-weaponBlock
-        print("The spiders deals ",enemyDamageDealt)
-        playerStats.damageAbsorbed=playerStats.damageAbsorbed+enemyDamageDealt
-        playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
-        print("You now have ",playerStats.playerHealth, "health")
-        print("")
-        decision=" "
-        decision=str(input("proceed?"))
-        print("")
-        if decision !=" ":
-          print("You strike back at the spider swarm")
-          damageDealt=weaponAttack-(0.2*enemyArmor)
-          mgcDamageDealth=weaponMagic*enemyMgcRes
-          if damageDealt<1:
-            damageDealt=0
-          print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
-          enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
-          decision=" "
-          decision=str(input("proceed?"))
-          print("")
-        if decision !=" ":
-          if playerHealth==0:
-            combatLoop="False"
-            gameEnd()
-          else:
-            if enemyHealth==0:
-              print("You win!")
-              combatLoop="False"
-      else:
-        print("You ready to attack the spider swarm")
-        damageDealt=weaponAttack-enemyArmor
-        mgcDamageDealt=weaponMagic*enemyMgcRes
-        if damageDealt<1:
-          damageDealt=0
-        print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
-        decision=" "
-        decision=str(input("proceed?"))
-        print("")
-        if decision !=" ":
-          print("the spiders bite at you")
-          enemyDamageDealt=enemyAttack-(.4*weaponBlock)
-          print("The spiders deal ",enemyDamageDealt," damage")
-          playerStats.damageAbsorbed=playerStats.damageAbsorbed+enemyDamageDealt
+          gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
           playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
           print("You now have ",playerStats.playerHealth, "health")
           print("")
@@ -743,7 +675,7 @@ class combatLoops():
         print("the mimic bites at you")
         enemyDamageDealt=enemyAttack-weaponBlock
         print("The mimic deals ",enemyDamageDealt)
-        playerStats.damageAbsorbed=playerStats.damageAbsorbed+enemyDamageDealt
+        gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
         playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
         print("You now have ",playerStats.playerHealth, "health")
         print("")
@@ -783,7 +715,7 @@ class combatLoops():
           print("the mimic bites at you")
           enemyDamageDealt=enemyAttack-(.5*weaponBlock)
           print("The mimic deals ",enemyDamageDealt," damage")
-          playerStats.damageAbsorbed=playerStats.damageAbsorbed+enemyDamageDealt
+          gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
           playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
           print("You now have ",playerStats.playerHealth, "health")
           print("")
@@ -809,7 +741,7 @@ class combatLoops():
         print("the troll swings his club at you")
         enemyDamageDealt=enemyAttack-weaponBlock
         print("The troll deals ",enemyDamageDealt)
-        playerStats.damageAbsorbed=playerStats.damageAbsorbed+enemyDamageDealt
+        gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
         playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
         print("You now have ",playerStats.playerHealth, "health")
         print("")
@@ -849,7 +781,7 @@ class combatLoops():
           print("the troll swings his club at you")
           enemyDamageDealt=enemyAttack-(.2*weaponBlock)
           print("The troll deals ",enemyDamageDealt," damage")
-          playerStats.damageAbsorbed=playerStats.damageAbsorbed+enemyDamageDealt
+          gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
           playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
           print("You now have ",playerStats.playerHealth, "health")
           print("")
@@ -863,13 +795,146 @@ class combatLoops():
             combatLoop="False"
     return
   def comatLoopspiderSwarm():
-    print("Spider Swarm")
+    global playerHealth
+    enemyHealth=enemyStats.spiderSwarm.health
+    enemyAttack=enemyStats.spiderSwarm.damage
+    enemyArmor=enemyStats.spiderSwarm.armorClass
+    enemyMgcRes=enemyStats.spiderSwarm.magicMdf
+    enemyInitiative=random.randrange(1,20)
+    playerInitiative=random.randrange(1,20)
+    combatLoop="True"
+    while combatLoop=="True":
+      if enemyInitiative >= playerInitiative:
+        print("the spiders bite at you")
+        enemyDamageDealt=enemyAttack-weaponBlock
+        print("The spider swarm deals ",enemyDamageDealt)
+        gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
+        playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+        print("You now have ",playerStats.playerHealth, "health")
+        print("")
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("You strike back at the spiders")
+          damageDealt=weaponAttack-(0.3*enemyArmor)
+          mgcDamageDealth=weaponMagic*enemyMgcRes
+          if damageDealt<1:
+            damageDealt=0
+          print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+          enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
+          decision=" "
+          decision=str(input("proceed?"))
+          print("")
+        if decision !=" ":
+          if playerHealth==0:
+            combatLoop="False"
+            gameEnd()
+          else:
+            if enemyHealth==0:
+              print("You win!")
+              combatLoop="False"
+      else:
+        print("You ready to attack the spider swarm")
+        damageDealt=weaponAttack-enemyArmor
+        mgcDamageDealt=weaponMagic*enemyMgcRes
+        if damageDealt<1:
+          damageDealt=0
+        print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("the spiders bite at you")
+          enemyDamageDealt=enemyAttack-(.2*weaponBlock)
+          print("The spider swarm deals ",enemyDamageDealt," damage")
+          gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
+          playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+          print("You now have ",playerStats.playerHealth, "health")
+          print("")
+        if playerStats.playerHealth==0:
+          combatLoop="False"
+          gameEnd()
+        else:
+          if enemyHealth==0:
+            print("You won!")
+            playerStats.gold=playerStats.gold+(random.randrange(20,100))
+            combatLoop="False"
     return
   def comatLoopspider():
-    print("Spider")
+    global playerHealth
+    enemyHealth=enemyStats.spiderSwarm.health
+    enemyAttack=enemyStats.spiderSwarm.damage
+    enemyArmor=enemyStats.spiderSwarm.armorClass
+    enemyMgcRes=enemyStats.spiderSwarm.magicMdf
+    enemyInitiative=random.randrange(1,20)
+    playerInitiative=random.randrange(1,20)
+    combatLoop="True"
+    while combatLoop=="True":
+      if enemyInitiative >= playerInitiative:
+        print("the spider bites at you")
+        enemyDamageDealt=enemyAttack-weaponBlock
+        print("The spider deals ",enemyDamageDealt)
+        gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
+        playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+        print("You now have ",playerStats.playerHealth, "health")
+        print("")
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("You strike back at the spiders")
+          damageDealt=weaponAttack-(0.3*enemyArmor)
+          mgcDamageDealth=weaponMagic*enemyMgcRes
+          if damageDealt<1:
+            damageDealt=0
+          print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+          enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
+          decision=" "
+          decision=str(input("proceed?"))
+          print("")
+        if decision !=" ":
+          if playerHealth==0:
+            combatLoop="False"
+            gameEnd()
+          else:
+            if enemyHealth==0:
+              print("You win!")
+              combatLoop="False"
+      else:
+        print("You ready to attack the spider swarm")
+        damageDealt=weaponAttack-enemyArmor
+        mgcDamageDealt=weaponMagic*enemyMgcRes
+        if damageDealt<1:
+          damageDealt=0
+        print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("the spiders bite at you")
+          enemyDamageDealt=enemyAttack-(.2*weaponBlock)
+          print("The spider swarm deals ",enemyDamageDealt," damage")
+          gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
+          playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+          print("You now have ",playerStats.playerHealth, "health")
+          print("")
+        if playerStats.playerHealth==0:
+          combatLoop="False"
+          gameEnd()
+        else:
+          if enemyHealth==0:
+            print("You won!")
+            playerStats.gold=playerStats.gold+(random.randrange(20,100))
+            combatLoop="False"
     return
   def bossComatLoopstoneGolem():
     print("Bossfight; Stone Golem")
+    print("")
+    return
+  def comatLooplich():
+    print("Lich")
+    print("")
     return
   
 def enterDun():
@@ -904,7 +969,7 @@ def betweenRoom():
         print("You drink a health potion")
         healthRecovered=random.randrange(1,6)
         print("You recover", healthRecovered, "health")
-        playerHealth=playerHealth+healthrecovered
+        playerStats.playerHealth=playerStats.playerHealth+healthRecovered
         decision1=str(input("Do you wish to check your inventory?"))
         if decision1=="yes" or "Yes" or "ye" or "Yeah" or "yeah":
           print("You decide to check your equipment")
@@ -959,6 +1024,7 @@ def worldGen():
               betweenRoom()
             elif diceRoll<12:
               print("As you approach the chest springs to life and jumps at you")
+              combatLoops.comatLoopmim()
           elif decision=="no" or decision=="No":
             print("You decide to move on from this room")
             print(" ")
@@ -999,7 +1065,7 @@ def worldGen():
                   damageTaken=random.randrange(1,6)
                   print("You take ",damageTaken," damage")
                   playerStats.playerHealth=playerStats.playerHealth-damageTaken
-                  print("You have ",playerHealth," health")
+                  print("You have ",playerStats.playerHealth," health")
                   print(" ")
                   lootGen()
                   betweenRoom()
@@ -1019,9 +1085,10 @@ def worldGen():
                   betweenRoom()
             else:
               if roomSelected=="TrollRiddle":
-                riddleSelection=["River","Troll","Death"]
+                riddleSelection=["River","Death"]
                 riddleSelected=random.choice(riddleSelection)
                 print (riddleSelected)
+                answer=""
                 print("You enter into a large cavern")
                 print("A troll sits on the other end guarding a gate")
                 print("The troll looks at you intently before speaking")
@@ -1046,7 +1113,7 @@ def worldGen():
                     elif answer !="a river" or "A river" or "A River" or "river" or "River":
                       print("Troll: too bad")
                       print("I was looking forward to eating you anyways")
-                      #comatLoopTroll()
+                      combatLoops.comatLooptroll()
                       lootGen()
                       inbetweenRoom()
                   elif riddleSelected=="Troll":
@@ -1056,6 +1123,7 @@ def worldGen():
                     print("But I am too slow to not be undone")
                     print("What am I?")
                     print("")
+                    answer=str(input("Answer: "))
                     if answer=="death" or "Death":
                       print("Troll: Good job")
                       print("Lets hope we cont cross paths again")
@@ -1063,20 +1131,20 @@ def worldGen():
                     elif answer != "death" or "Death":
                       print("Troll: too bad")
                       print("I was looking forward to eating you anyways")
-                      #comatLoopTroll()
+                      combatLoops.comatLooptroll()
               else:
                 if roomSelected=="LichCrypt":
                   print("You enter a long room")
                   print("it reeks of rotting flesh")
                   print("as you move forward several skeletons start to rise from the floor")
-                  comatLoopskele()
+                  combatLoops.comatLoopskele()
                   print("As the final skeleton drops dead, a tall figure appears behind you")
                   #comatLoopLich()
                 elif roomSelected=="SpiderNest":
                   print("A dark and dry room is ahead of you")
                   print("As you raise your torch you find many spiders staring back at you")
-                  comatLoopspiderSwarm()
-                  comatLoopspider()
+                  combatLoops.comatLoopspiderSwarm()
+                  combatLoops.comatLoopspider()
                   inbetweenRoom()
                 elif roomSelected=="GolemChamber":
                   print("A massive room lays before you")
