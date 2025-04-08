@@ -503,7 +503,7 @@ class enemies:
     damage=30.0
     health=60.0
     armorClass=10.0
-    magicMDf=weaponMagic*0.9
+    magicMdf=weaponMagic*0.9
     itemID="Mimic"
   mimicStats=mimic()
   class troll:
@@ -554,7 +554,7 @@ class combatLoops():
         if decision !=" ":
           print("You strike back at the skeleton")
           damageDealt=weaponAttack-(0.8*enemyArmor)
-          mgcDamageDealt=weaponMagic*enemyMgcRes
+          mgcDamageDealt=weaponMagic/enemyMgcRes
           if damageDealt<1:
             damageDealt=0
           print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
@@ -569,7 +569,7 @@ class combatLoops():
       else:
         print("You ready to attack the skeleton")
         damageDealt=weaponAttack-enemyArmor
-        mgcDamageDealt=weaponMagic*enemyMgcRes
+        mgcDamageDealt=weaponMagic/enemyMgcRes
         if damageDealt<1:
           damageDealt=0
         print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
@@ -584,15 +584,15 @@ class combatLoops():
           playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
           print("You now have ",playerStats.playerHealth, "health")
           print("")
-        if playerHealth==0:
-          combatLoop="False"
-          playerStats.enemiesKilled=playerStats.enemiesKilled+1
-          playerStats.gold=playerStats.gold+random.randrange(5,30)
-          gameEnd()
-        else:
-          if enemyHealth==0:
-            print("You won!")
+          if playerStats.playerHealth==0:
             combatLoop="False"
+            playerStats.enemiesKilled=playerStats.enemiesKilled+1
+            playerStats.gold=playerStats.gold+random.randrange(5,30)
+            gameEnd()
+          else:
+            if enemyHealth==0:
+              print("You won!")
+              combatLoop="False"
             
     return
   def comatLoopZom():
@@ -619,7 +619,7 @@ class combatLoops():
         if decision !=" ":
           print("You strike back at the zombie")
           damageDealt=weaponAttack-(0.6*enemyArmor)
-          mgcDamageDealth=weaponMagic*enemyMgcRes
+          mgcDamageDealth=weaponMagic/enemyMgcRes
           if damageDealt<1:
             damageDealt=0
           print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
@@ -640,7 +640,7 @@ class combatLoops():
       else:
         print("You ready to attack the zombie")
         damageDealt=weaponAttack-enemyArmor
-        mgcDamageDealt=weaponMagic*enemyMgcRes
+        mgcDamageDealt=weaponMagic/enemyMgcRes
         if damageDealt<1:
           damageDealt=0
         print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
@@ -687,7 +687,7 @@ class combatLoops():
         if decision !=" ":
           print("You strike back at the mimic")
           damageDealt=weaponAttack-(0.6*enemyArmor)
-          mgcDamageDealth=weaponMagic*enemyMgcRes
+          mgcDamageDealth=weaponMagic/enemyMgcRes
           if damageDealt<1:
             damageDealt=0
           print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
@@ -706,7 +706,7 @@ class combatLoops():
       else:
         print("You ready to attack the mimic")
         damageDealt=weaponAttack-enemyArmor
-        mgcDamageDealt=weaponMagic*enemyMgcRes
+        mgcDamageDealt=weaponMagic/enemyMgcRes
         if damageDealt<1:
           damageDealt=0
         print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
@@ -753,7 +753,7 @@ class combatLoops():
         if decision !=" ":
           print("You strike back at the troll")
           damageDealt=weaponAttack-(0.3*enemyArmor)
-          mgcDamageDealth=weaponMagic*enemyMgcRes
+          mgcDamageDealth=weaponMagic/enemyMgcRes
           if damageDealt<1:
             damageDealt=0
           print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
@@ -772,7 +772,7 @@ class combatLoops():
       else:
         print("You ready to attack the troll")
         damageDealt=weaponAttack-enemyArmor
-        mgcDamageDealt=weaponMagic*enemyMgcRes
+        mgcDamageDealt=weaponMagic/enemyMgcRes
         if damageDealt<1:
           damageDealt=0
         print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
@@ -820,7 +820,7 @@ class combatLoops():
         if decision !=" ":
           print("You strike back at the spiders")
           damageDealt=weaponAttack-(0.3*enemyArmor)
-          mgcDamageDealth=weaponMagic*enemyMgcRes
+          mgcDamageDealth=weaponMagic/enemyMgcRes
           if damageDealt<1:
             damageDealt=0
           print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
@@ -839,7 +839,7 @@ class combatLoops():
       else:
         print("You ready to attack the spider swarm")
         damageDealt=weaponAttack-enemyArmor
-        mgcDamageDealt=weaponMagic*enemyMgcRes
+        mgcDamageDealt=weaponMagic/enemyMgcRes
         if damageDealt<1:
           damageDealt=0
         print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
@@ -887,7 +887,7 @@ class combatLoops():
         if decision !=" ":
           print("You strike back at the spiders")
           damageDealt=weaponAttack-(0.3*enemyArmor)
-          mgcDamageDealth=weaponMagic*enemyMgcRes
+          mgcDamageDealth=weaponMagic/enemyMgcRes
           if damageDealt<1:
             damageDealt=0
           print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
@@ -905,11 +905,12 @@ class combatLoops():
               combatLoop="False"
       else:
         print("You ready to attack the spider swarm")
-        damageDealt=weaponAttack-enemyArmor
-        mgcDamageDealt=weaponMagic*enemyMgcRes
+        phyDamageDealt=weaponAttack-enemyArmor
+        mgcDamageDealt=weaponMagic/enemyMgcRes
+        damageDealth=phyDamageDealt+mgcDamageDealt
         if damageDealt<1:
           damageDealt=0
-        print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+        print("you deal ",damageDealt," damage.")
         decision=" "
         decision=str(input("proceed?"))
         print("")
@@ -985,7 +986,7 @@ def betweenRoom():
       print("")
       combatLoops.comatLoopskele()
   else:
-    if decision=="no" or decision=="No":
+    if decision=="no" or "No":
       print("You decide to move onto the next room")
       print("")
   return
