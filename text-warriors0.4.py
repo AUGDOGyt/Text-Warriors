@@ -1144,7 +1144,7 @@ def worldGen():
                   print("as you move forward several skeletons start to rise from the floor")
                   combatLoops.comatLoopskele()
                   print("As the final skeleton drops dead, a tall figure appears behind you")
-                  comatLoopLich()
+                  combatLoops.comatLoopLich()
                   betweenRoom()
                 elif roomSelected=="SpiderNest":
                   print("A dark and dry room is ahead of you")
