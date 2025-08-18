@@ -5,6 +5,7 @@ class gameStats:
   global enemiesKilled
   global hpGained
   global gold
+  global damageAbsorbed
   enemiesKilled=0
   hpGained=0
   damageAbsorbed=0
