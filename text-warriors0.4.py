@@ -5,10 +5,8 @@ class gameStats:
   global enemiesKilled
   global hpGained
   global gold
-  global damageAbsorbed
   enemiesKilled=0
   hpGained=0
-  damageAbsorbed=0
   gold=0
 class playerStats:
   playerHealth=50
@@ -33,9 +31,10 @@ class playerStats:
   playerMgcMdf=Intelligence+playerProficency
 
 
-print("Welcome to beta version 0.4!")
-print("Beta version 0.4 has brought some very big updates to the game!!")
-print("5 new rooms have been added and the combat system has been very developed")
+print("Welcome to beta version 0.4.1!")
+print("Beta version 0.4.1 brings bug fixes and cleaning up some of the old code")
+print("Resting between rooms was forced before but now is optional")
+print("Used switch statements for the worldgen instead of nested loops")
 print("You can expect more rooms in the following releases, as well as some new enemies")
 print("I hope you enjoy exploring the world as it is now!")
 print("-AUG__DOG")
@@ -440,7 +439,7 @@ def lootGen():
       decision=str(input("Would you like to pick up this weapon? "))
       if decision=="yes" or decision=="Yes":
         print("You pickup the new weapon, it feels good as you toss it from hand to hand")
-        equipNew()
+        equipNewLegen()
         print("")
       elif decision=="no" or decision=="No":
         print("You decide to leave it there")
@@ -545,7 +544,6 @@ class combatLoops():
         print("the skeleton swings at you")
         enemyDamageDealt=enemyAttack-(0.4*weaponBlock)
         print("The skeleton deals ",enemyDamageDealt," damage")
-        gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
         playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
         print("You now have ",playerStats.playerHealth, "health")
         print("")
@@ -581,7 +579,6 @@ class combatLoops():
           print("the skeleton swings at you")
           enemyDamageDealt=enemyAttack-(.2*weaponBlock)
           print("The skeleton deals ",enemyDamageDealt," damage")
-          gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
           playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
           print("You now have ",playerStats.playerHealth, "health")
           print("")
@@ -610,7 +607,6 @@ class combatLoops():
         print("the zombie swings at you")
         enemyDamageDealt=enemyAttack-weaponBlock
         print("The zombie deals ",enemyDamageDealt)
-        gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
         playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
         print("You now have ",playerStats.playerHealth, "health")
         print("")
@@ -656,7 +652,6 @@ class combatLoops():
           print("the zombie swings at you")
           enemyDamageDealt=enemyAttack-(.2*weaponBlock)
           print("The zombie deals ",enemyDamageDealt," damage")
-          gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
           playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
           if playerStats.playerHealth==0:
             combatLoop="False"
@@ -678,7 +673,6 @@ class combatLoops():
         print("the mimic bites at you")
         enemyDamageDealt=enemyAttack-weaponBlock
         print("The mimic deals ",enemyDamageDealt)
-        gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
         playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
         print("You now have ",playerStats.playerHealth, "health")
         print("")
@@ -718,7 +712,6 @@ class combatLoops():
           print("the mimic bites at you")
           enemyDamageDealt=enemyAttack-(.5*weaponBlock)
           print("The mimic deals ",enemyDamageDealt," damage")
-          gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
           playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
           print("You now have ",playerStats.playerHealth, "health")
           print("")
@@ -744,7 +737,6 @@ class combatLoops():
         print("the troll swings his club at you")
         enemyDamageDealt=enemyAttack-weaponBlock
         print("The troll deals ",enemyDamageDealt)
-        gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
         playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
         print("You now have ",playerStats.playerHealth, "health")
         print("")
@@ -784,7 +776,6 @@ class combatLoops():
           print("the troll swings his club at you")
           enemyDamageDealt=enemyAttack-(.2*weaponBlock)
           print("The troll deals ",enemyDamageDealt," damage")
-          gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
           playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
           print("You now have ",playerStats.playerHealth, "health")
           print("")
@@ -811,7 +802,6 @@ class combatLoops():
         print("the spiders bite at you")
         enemyDamageDealt=enemyAttack-weaponBlock
         print("The spider swarm deals ",enemyDamageDealt)
-        gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
         playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
         print("You now have ",playerStats.playerHealth, "health")
         print("")
@@ -851,7 +841,6 @@ class combatLoops():
           print("the spiders bite at you")
           enemyDamageDealt=enemyAttack-(.2*weaponBlock)
           print("The spider swarm deals ",enemyDamageDealt," damage")
-          gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
           playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
           print("You now have ",playerStats.playerHealth, "health")
           print("")
@@ -878,7 +867,6 @@ class combatLoops():
         print("the spider bites at you")
         enemyDamageDealt=enemyAttack-weaponBlock
         print("The spider deals ",enemyDamageDealt)
-        gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
         playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
         print("You now have ",playerStats.playerHealth, "health")
         print("")
@@ -919,7 +907,6 @@ class combatLoops():
           print("the spiders bite at you")
           enemyDamageDealt=enemyAttack-(.2*weaponBlock)
           print("The spider swarm deals ",enemyDamageDealt," damage")
-          gameStats.damageAbsorbed=gameStats.damageAbsorbed+enemyDamageDealt
           playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
           print("You now have ",playerStats.playerHealth, "health")
           print("")
@@ -986,8 +973,7 @@ def betweenRoom():
       print("You rush to your feet as skeletons round the corner")
       print("")
       combatLoops.comatLoopskele()
-  else:
-    if decision=="no" or "No":
+  elif decision=="no" or "No" or "n" or "N":
       print("You decide to move onto the next room")
       print("")
   return
@@ -996,179 +982,166 @@ def worldGen():
   roomSelector=["SkellyScare","ZombieChamber","MimicRoom","LootRoom","SpikeTrap","TrollRiddle","LichCrypt","SpiderNest"]
   roomSelected=random.choice(roomSelector)
   if roomSelected in roomSelector:
-    if roomSelected=="SkellyScare":
-      print("You enter a dark and dry room")
-      print("As you swing your torch around to illuminate the room")
-      print("You hear clacking as several skeletons rise from the ground, brandishing daggers")
-      print(" ")
-      combatLoops.comatLoopskele()
-      lootGen()
-      betweenRoom()
-    else:
-      if roomSelected=="ZombieChamber":
+    match roomSelected:
+      case "SkellyScare":
+        print("You enter a dark and dry room")
+        print("As you swing your torch around to illuminate the room")
+        print("You hear clacking as several skeletons rise from the ground, brandishing daggers")
+        print(" ")
+        combatLoops.comatLoopskele()
+        lootGen()
+        betweenRoom()
+      case "ZombieChamber":
         print("Your nostrils are assaulted with a foul stench")
         print("Suddenly an undead rises from the dust and attacks you")
         print(" ")
         combatLoops.comatLoopZom()
         lootGen()
         betweenRoom()
-      else:
-        if roomSelected=="MimicRoom":
-          print("You enter into a large chamber")
-          print("You see a chest in the center of the room")
-          decision=input("Do you wish to approach the chest?")
+      case "MimicRoom":
+        print("You enter into a large chamber")
+        print("You see a chest in the center of the room")
+        decision=input("Do you wish to approach the chest?")
+        print(" ")
+        diceRoll=random.randrange(1,20)
+        if decision=="yes" or decision=="Yes":
+          print("You decide to walk towards the chest")
           print(" ")
-          diceRoll=random.randrange(1,20)
-          if decision=="yes" or decision=="Yes":
-            print("You decide to walk towards the chest")
-            print(" ")
-            if diceRoll>11:
-              print("You open the chest and find some loot")
-              lootGen()
-              betweenRoom()
-            elif diceRoll<12:
-              print("As you approach the chest springs to life and jumps at you")
-              combatLoops.comatLoopmim()
-          elif decision=="no" or decision=="No":
-            print("You decide to move on from this room")
-            print(" ")
+          if diceRoll>11:
+            print("You open the chest and find some loot")
+            lootGen()
             betweenRoom()
-        else:
-          if roomSelected=="SpikeTrap":
-            print("A rectangular room lies before you")
+          elif diceRoll<12:
+            print("As you approach the chest springs to life and jumps at you")
+            combatLoops.comatLoopmim()
+        elif decision=="no" or decision=="No":
+          print("You decide to move on from this room")
+          print(" ")
+          betweenRoom()
+      case "SpikeTrap":
+        print("A rectangular room lies before you")
+        print(" ")
+        diceRoll=random.randrange(1,20)
+        if diceRoll>14:
+          print("You notice that some of the stone tiles on the floor appear to have gaps around them")
+          print("")
+          decision=" "
+          decision=input("Are you ready to proceed?")
+          if decision != " ":
+            print("You are able to avoid the trapped tiles and progress onto the next room")
             print(" ")
+          lootGen()
+          betweenRoom()
+        elif diceRoll<15:
+          print("As you walk across the room, you suddenly feel your foot give")
+          print("As you look down at your foot you see that you triggered a trapped tile")
+          print("Suddenly you hear stone scraping on stone, as a spiked ceiling begins to fall")
+          decision=" "
+          decision=input("Are you ready to proceed?")
+          print(" ")
+          if decision !=" ":
             diceRoll=random.randrange(1,20)
-            if diceRoll>14:
-              print("You notice that some of the stone tiles on the floor appear to have gaps around them")
-              print("")
-              decision=" "
-              decision=input("Are you ready to proceed?")
-              if decision != " ":
-                print("You are able to avoid the trapped tiles and progress onto the next room")
-                print(" ")
+            if diceRoll>15:
+              print("You manage to outrun the ceiling and escape the spike trap")
+              print("You stand up and dust yourself off, before proceeding to the next room")
+              print(" ")
               lootGen()
               betweenRoom()
-            elif diceRoll<15:
-              print("As you walk across the room, you suddenly feel your foot give")
-              print("As you look down at your foot you see that you triggered a trapped tile")
-              print("Suddenly you hear stone scraping on stone, as a spiked ceiling begins to fall")
-              decision=" "
-              decision=input("Are you ready to proceed?")
+            elif diceRoll<16:
+              print("You attempt to outrun the trap")
+              print("However your leg is caught underneath a spike")
+              damageTaken=random.randrange(1,6)
+              print("You take ",damageTaken," damage")
+              playerStats.playerHealth=playerStats.playerHealth-damageTaken
+              print("You have ",playerStats.playerHealth," health")
               print(" ")
-              if decision !=" ":
-                diceRoll=random.randrange(1,20)
-                if diceRoll>15:
-                  print("You manage to outrun the ceiling and escape the spike trap")
-                  print("You stand up and dust yourself off, before proceeding to the next room")
-                  print(" ")
-                  lootGen()
-                  betweenRoom()
-                elif diceRoll<16:
-                  print("You attempt to outrun the trap")
-                  print("However your leg is caught underneath a spike")
-                  damageTaken=random.randrange(1,6)
-                  print("You take ",damageTaken," damage")
-                  playerStats.playerHealth=playerStats.playerHealth-damageTaken
-                  print("You have ",playerStats.playerHealth," health")
-                  print(" ")
-                  lootGen()
-                  betweenRoom()
-          else:
-            if roomSelected=="LootRoom":
-              print("You enter into a large chamber")
-              print("You see a large chest in the center of the room")
-              decision=input("Do you wish to approach the chest?")
+              lootGen()
+              betweenRoom()
+      case "LootRoom":
+        print("You enter into a large chamber")
+        print("You see a large chest in the center of the room")
+        decision=input("Do you wish to approach the chest?")
+        print(" ")
+        if decision=="yes" or decision=="Yes":
+          print("You open it and find some loot")
+          lootGen()
+          betweenRoom()
+        elif decision=="No" or decision=="no":
+          print("You decide to pass by the room")
+          betweenRoom()
+      case "TrollRiddle":
+        riddleSelection=["River","Death"]
+        riddleSelected=random.choice(riddleSelection)
+        print (riddleSelected)
+        answer=""
+        print("You enter into a large cavern")
+        print("A troll sits on the other end guarding a gate")
+        print("The troll looks at you intently before speaking")
+        print("Troll: answer my riddle and you can pass")
+        print("Get it wrong and die")
+        print("")
+        proceed=" "
+        proceed=str(input("Proceed?"))
+        if proceed !=" ":
+          if riddleSelected=="River":
+            print("I run but never stop")
+            print("I have a bed but never sleep")
+            print("What am I?")
+            answer=str(input("Answer: "))
+            print("")
+            if answer=="a river" or "A river" or "A River" or "river" or "River":
+              print("Troll: Good job")
+              print("Lets hope we dont cross paths again")
               print(" ")
-              if decision=="yes" or decision=="Yes":
-                print("You open it and find some loot")
-                lootGen()
-                betweenRoom()
-              else:
-                if decision=="No" or decision=="no":
-                  print("You decide to pass by the room")
-                  betweenRoom()
-            else:
-              if roomSelected=="TrollRiddle":
-                riddleSelection=["River","Death"]
-                riddleSelected=random.choice(riddleSelection)
-                print (riddleSelected)
-                answer=""
-                print("You enter into a large cavern")
-                print("A troll sits on the other end guarding a gate")
-                print("The troll looks at you intently before speaking")
-                print("Troll: answer my riddle and you can pass")
-                print("Get it wrong and die")
-                print("")
-                proceed=" "
-                proceed=str(input("Proceed?"))
-                if proceed !=" ":
-                  if riddleSelected=="River":
-                    print("I run but never stop")
-                    print("I have a bed but never sleep")
-                    print("What am I?")
-                    answer=str(input("Answer: "))
-                    print("")
-                    if answer=="a river" or "A river" or "A River" or "river" or "River":
-                      print("Troll: Good job")
-                      print("Lets hope we dont cross paths again")
-                      print(" ")
-                      lootGen()
-                      betweenRoom()
-                    elif answer !="a river" or "A river" or "A River" or "river" or "River":
-                      print("Troll: too bad")
-                      print("I was looking forward to eating you anyways")
-                      combatLoops.comatLooptroll()
-                      lootGen()
-                      betweenRoom()
-                  elif riddleSelected=="Troll":
-                    print("troll")
-                  elif riddleSelected=="Death":
-                    print("I am fast and sudden")
-                    print("But I am too slow to not be undone")
-                    print("What am I?")
-                    print("")
-                    answer=str(input("Answer: "))
-                    if answer=="death" or "Death":
-                      print("Troll: Good job")
-                      print("Lets hope we cont cross paths again")
-                      betweenRoom()
-                    elif answer != "death" or "Death":
-                      print("Troll: too bad")
-                      print("I was looking forward to eating you anyways")
-                      combatLoops.comatLooptroll()
-                      
-              else:
-                if roomSelected=="LichCrypt":
-                  print("You enter a long room")
-                  print("it reeks of rotting flesh")
-                  print("as you move forward several skeletons start to rise from the floor")
-                  combatLoops.comatLoopskele()
-                  print("As the final skeleton drops dead, a tall figure appears behind you")
-                  combatLoops.comatLoopLich()
-                  betweenRoom()
-                elif roomSelected=="SpiderNest":
-                  print("A dark and dry room is ahead of you")
-                  print("As you raise your torch you find many spiders staring back at you")
-                  combatLoops.comatLoopspiderSwarm()
-                  combatLoops.comatLoopspider()
-                  betweenRoom()
-                elif roomSelected=="GolemChamber":
-                  print("A massive room lays before you")
-                  print("Massive pillars line the walls")
-                  print("At the end of the room a massive golem lays motionless,")
-                  print("A horde of treasure lies behind him")
+              lootGen()
+              betweenRoom()
+            elif answer !="a river" or "A river" or "A River" or "river" or "River":
+              print("Troll: too bad")
+              print("I was looking forward to eating you anyways")
+              combatLoops.comatLooptroll()
+              lootGen()
+              betweenRoom()
+          elif riddleSelected=="Troll":
+            print("troll")
+          elif riddleSelected=="Death":
+            print("I am fast and sudden")
+            print("But I am too slow to not be undone")
+            print("What am I?")
+            print("")
+            answer=str(input("Answer: "))
+            if answer=="death" or "Death":
+              print("Troll: Good job")
+              print("Lets hope we cont cross paths again")
+              lootGen()
+              betweenRoom()
+            elif answer != "death" or "Death":
+              print("Troll: too bad")
+              print("I was looking forward to eating you anyways")
+              combatLoops.comatLooptroll()
+      case "LichCrypt":
+        print("You enter a long room")
+        print("it reeks of rotting flesh")
+        print("as you move forward several skeletons start to rise from the floor")
+        combatLoops.comatLoopskele()
+        print("As the final skeleton drops dead, a tall figure appears behind you")
+        combatLoops.comatLoopLich()
+        betweenRoom()
+      case "SpiderNest":
+        print("A dark and dry room is ahead of you")
+        print("As you raise your torch you find many spiders staring back at you")
+        combatLoops.comatLoopspiderSwarm()
+        combatLoops.comatLoopspider()
+        betweenRoom()
+      case "GolemnBRoom":
+        print("A massive room lays before you")
+        print("Massive pillars line the walls")
+        print("At the end of the room a massive golem lays motionless,")
+        print("A horde of treasure lies behind him")
   return
 
 def gameLoop():
   worldGen()
   return
-
-while initialize==5:
-  gameLoop()
-  worldGen()
-
-while initialize==5:
-  gameLoop()
 
 while initialize==5:
   gameLoop()
