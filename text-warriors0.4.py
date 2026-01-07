@@ -16,32 +16,31 @@ class playerStats:
   Vitality=10
   Perception=10
   Intelligence=10
-  Proficency=5
+  Proficiency=5
   Level=1
   gold=20
   weaponName="Wooden Sword"
   name="John"
   ###
-  playerProficency=Proficency*.1
-  playerHealth=(playerHealth+(Vitality*10))+playerProficency
-  playerDmgMdf=(Strength*.1)+playerProficency
-  playerDefMdf=(Defense*.1)+playerProficency
-  playerDodgeChance=(Dexterity*.1)+playerProficency
+  playerProficiency=Proficiency*.1
+  playerHealth=(playerHealth+(Vitality*10))+playerProficiency
+  playerDmgMdf=(Strength*.1)+playerProficiency
+  playerDefMdf=(Defense*.1)+playerProficiency
+  playerDodgeChance=(Dexterity*.1)+playerProficiency
   playerIntuition=Perception
-  playerMgcMdf=Intelligence+playerProficency
+  playerMgcMdf=Intelligence+playerProficiency
 
-
-print("Welcome to beta version 0.4.1!")
-print("Beta version 0.4.1 brings bug fixes and cleaning up some of the old code")
+print("Welcome to beta version 0.4.2!")
+print("Beta version 0.4.2 brings bug fixes and the combat system actually working now!")
 print("Resting between rooms was forced before but now is optional")
-print("Used switch statements for the worldgen instead of nested loops")
-print("You can expect more rooms in the following releases, as well as some new enemies")
+print("Currently only zombie and skeleton combats are coded but I am working on the others")
+print("You can expect more rooms in the following releases, as well as some new mechanics")
 print("I hope you enjoy exploring the world as it is now!")
 print("-AUG__DOG")
 print(" ")
 
 def credits():
-  print("Lead Coder and Designer: Sky")
+  print("Lead Coder and Designer: AUG__DOG")
   print("Playtester: Fabric, Nightingal3")
 
 def gameEnd():
@@ -49,10 +48,8 @@ def gameEnd():
   print("You had a good run")
   print("")
   initialize=4
-  #display game stats here
   print("You killed ",enemiesKilled," enemies")
   print("Throughout your adventure you recovered ",hpGained," health")
-  print("And you took ",damageAbsorbed," damage")
   print("You earned ",gold," gold")
   print("")
   credits()
@@ -83,11 +80,11 @@ def tutorial():
         if response1=="where are we?" or response1=="Where are we?":
           print("")
           print("Old man: Im not sure")
-          print("I guess the developer is a lazy piece of shit")
-          print("Who couldnt even spend the time to name my birthplace")
+          print("I guess the developer is a lazy bum")
+          print("Who couldn't even spend the time to name my birthplace")
           print("")
         else:
-          if response1=="no" or "No":
+          if response1=="no" or response1=="No":
             print("Ok then lets get you on your way")
     print("Old man: Now, enough dillydallying")
     print("Here is a sword, I pray you know how to use it")
@@ -529,6 +526,10 @@ class enemies:
   stoneGolemStats=stoneGolem()
 enemyStats=enemies()
 
+def winCombat():
+    print("You Win!")
+    gameStats.enemiesKilled=gameStats.enemiesKilled+1
+
 class combatLoops():
   def comatLoopskele():
     global playerHealth
@@ -542,7 +543,9 @@ class combatLoops():
     while combatLoop=="True":
       if enemyInitiative >= playerInitiative:
         print("the skeleton swings at you")
-        enemyDamageDealt=enemyAttack-(0.4*weaponBlock)
+        enemyDamageDealt=enemyAttack-(0.9*weaponBlock)
+        if enemyDamageDealt<1:
+            enemyDamageDealt=1
         print("The skeleton deals ",enemyDamageDealt," damage")
         playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
         print("You now have ",playerStats.playerHealth, "health")
@@ -552,26 +555,27 @@ class combatLoops():
         print("")
         if decision !=" ":
           print("You strike back at the skeleton")
-          damageDealt=weaponAttack-(0.8*enemyArmor)
+          damageDealt=weaponAttack-(0.5*enemyArmor)
           mgcDamageDealt=weaponMagic/enemyMgcRes
           if damageDealt<1:
-            damageDealt=0
+            damageDealt=1
+          if mgcDamageDealt<1:
+            mgcDamageDealt=1
           print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
           enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
-          if playerStats.playerHealth==0:
-            combatLoop="False"
-            gameEnd()
-          else:
-            if enemyHealth==0:
-              print("You win!")
-              combatLoop="False"
       else:
         print("You ready to attack the skeleton")
-        damageDealt=weaponAttack-enemyArmor
-        mgcDamageDealt=weaponMagic/enemyMgcRes
+        damageDealt=weaponAttack-(0.5*enemyArmor)
+        mgcDamageDealt=weaponMagic/(0.4*enemyMgcRes)
         if damageDealt<1:
           damageDealt=0
+        if mgcDamageDealt<1:
+          mgcDamageDealt=1
         print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+        enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
+        if enemyHealth<=0:
+            combatLoop="False"
+            winCombat()
         decision=" "
         decision=str(input("proceed?"))
         print("")
@@ -582,16 +586,12 @@ class combatLoops():
           playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
           print("You now have ",playerStats.playerHealth, "health")
           print("")
-          if playerStats.playerHealth==0:
-            combatLoop="False"
-            playerStats.enemiesKilled=playerStats.enemiesKilled+1
-            playerStats.gold=playerStats.gold+random.randrange(5,30)
-            gameEnd()
-          else:
-            if enemyHealth==0:
-              print("You won!")
-              combatLoop="False"
-            
+      if playerStats.playerHealth<=0:
+        combatLoop="False"
+        gameEnd()
+      elif enemyHealth<=0:
+        combatLoop="False"
+        winCombat()
     return
   def comatLoopZom():
     global playerHealth
@@ -615,22 +615,20 @@ class combatLoops():
         print("")
         if decision !=" ":
           print("You strike back at the zombie")
-          damageDealt=weaponAttack-(0.6*enemyArmor)
-          mgcDamageDealth=weaponMagic/enemyMgcRes
+          damageDealt=weaponAttack-(0.5*enemyArmor)
+          mgcDamageDealt=weaponMagic/(0.5*enemyMgcRes)
           if damageDealt<1:
             damageDealt=0
+          if mgcDamageDealt<1:
+              mgcDamageDealt=1
           print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
           enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
+          if enemyHealth<=0:
+            combatLoop="False"
+            winCombat()
           decision=" "
           decision=str(input("proceed?"))
           print("")
-          if playerHealth<=0:
-            combatLoop="False"
-            gameEnd()
-          else:
-            if enemyHealth<=0:
-              print("You win!")
-              combatLoop="False"
         if decision !=" ":
           print("Continuing")
           print("")
@@ -640,11 +638,13 @@ class combatLoops():
         mgcDamageDealt=weaponMagic/enemyMgcRes
         if damageDealt<1:
           damageDealt=0
+        if mgcDamageDealt<1:
+          mgcDamageDealt=1
         print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
         enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
-        if enemyHealth==0:
-            print("You won!")
+        if enemyHealth<=0:
             combatLoop="False"
+            winCombat()
         decision=" "
         decision=str(input("proceed?"))
         print("")
@@ -658,6 +658,9 @@ class combatLoops():
             gameEnd()
           print("You now have ",playerStats.playerHealth, "health")
           print("")
+      if playerStats.playerHealth<=0:
+          combatLoop="False"
+          gameEnd()
     return
   def comatLoopmim():
     global playerHealth
@@ -949,37 +952,44 @@ enterDun()
 
 def betweenRoom():
   decision=" "
-  decision=input("Would you like to rest between rooms?")
+  decision=input("Would you like to rest between rooms? ")
   print(" ")
-  if decision=="yes" or "Yes" or "y":
+  if decision=="yes" or decision=="Yes" or decision=="y" or decision=="Y":
     print("You decide to stop and rest for a bit before moving on")
     diceRoll=random.randrange(1,20)
     if diceRoll>2:
       decision2=input("Would you like to drink a health potion?")
       if decision2=="yes" or decision2=="Yes":
         print("You drink a health potion")
-        healthRecovered=random.randrange(1,6)
+        healthRecovered=random.randrange(3,50)
         print("You recover", healthRecovered, "health")
         playerStats.playerHealth=playerStats.playerHealth+healthRecovered
-        decision1=str(input("Do you wish to check your inventory?"))
-        if decision1=="yes" or "Yes" or "ye" or "Yeah" or "yeah":
+        decision3=str(input("Do you wish to check your inventory?"))
+        if decision3=="yes" or decision3=="Yes" or decision3=="ye" or decision3=="Yeah" or decision3=="yeah":
           print("You decide to check your equipment")
           print(weaponName)
           print("Your weapons attack is ",weaponAttack)
           print("Your weapons block is ",weaponBlock)
           print("And your weapons magic is ",weaponMagic)
+        elif decision3=="no" or decision3=="No" or decision3=="n" or decision3=="N":
+            print("You decide to move onto the next room")
+            print("")
+            return
     elif diceRoll<3:
       print("You hear bone rattling echoing throughout the halls")
       print("You rush to your feet as skeletons round the corner")
       print("")
       combatLoops.comatLoopskele()
-  elif decision=="no" or "No" or "n" or "N":
+      combatLoops.comatLoopskele()
+  else:
+    if decision=="no" or decision=="No" or decision=="n" or decision=="N":
       print("You decide to move onto the next room")
       print("")
   return
 
 def worldGen():
-  roomSelector=["SkellyScare","ZombieChamber","MimicRoom","LootRoom","SpikeTrap","TrollRiddle","LichCrypt","SpiderNest"]
+  roomSelector=["SkellyScare", "ZombieChamber","LootRoom","SpikeTrap"]
+  archiveRooms=["MimicRoom","TrollRiddle","LichCrypt","SpiderNest"]
   roomSelected=random.choice(roomSelector)
   if roomSelected in roomSelector:
     match roomSelected:
@@ -1089,13 +1099,13 @@ def worldGen():
             print("What am I?")
             answer=str(input("Answer: "))
             print("")
-            if answer=="a river" or "A river" or "A River" or "river" or "River":
+            if answer=="a river" or answer=="A river" or answer=="A River" or answer=="river" or answer=="River":
               print("Troll: Good job")
               print("Lets hope we dont cross paths again")
               print(" ")
               lootGen()
               betweenRoom()
-            elif answer !="a river" or "A river" or "A River" or "river" or "River":
+            else:
               print("Troll: too bad")
               print("I was looking forward to eating you anyways")
               combatLoops.comatLooptroll()
@@ -1109,12 +1119,12 @@ def worldGen():
             print("What am I?")
             print("")
             answer=str(input("Answer: "))
-            if answer=="death" or "Death":
+            if answer=="death" or answer=="Death":
               print("Troll: Good job")
               print("Lets hope we cont cross paths again")
               lootGen()
               betweenRoom()
-            elif answer != "death" or "Death":
+            else:
               print("Troll: too bad")
               print("I was looking forward to eating you anyways")
               combatLoops.comatLooptroll()
