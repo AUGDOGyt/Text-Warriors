@@ -31,8 +31,8 @@ class playerStats:
   playerIntuition=Perception
   playerMgcMdf=Intelligence+playerProficiency
 
-print("Welcome to beta version 0.5.0!")
-print("Beta version 0.5.0 brings small bug fixes and the completed combat system")
+print("Welcome to beta version 0.5.1!")
+print("Beta version 0.5.1 brings small bug fixes and the completed combat system")
 print("All options for every choice are now reachable with shortened inputs")
 print("Troll now has 3 riddle options you can encounter")
 print("All combats have been finished (except for Golem and Lich since they are bosses)")
@@ -1126,9 +1126,8 @@ def worldGen():
           print("You decide to pass by the room")
           betweenRoom()
       case "TrollRiddle":
-        riddleSelection=["River","Death"]
+        riddleSelection=["River","Death","Ship"]
         riddleSelected=random.choice(riddleSelection)
-        print (riddleSelected)
         answer=""
         print("You enter into a large cavern")
         print("A troll sits on the other end guarding a gate")
