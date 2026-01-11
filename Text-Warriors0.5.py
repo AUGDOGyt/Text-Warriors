@@ -1,0 +1,1220 @@
+import math
+import random
+
+class gameStats:
+  global enemiesKilled
+  global hpGained
+  global gold
+  enemiesKilled=0
+  hpGained=0
+  gold=0
+class playerStats:
+  playerHealth=50
+  Strength=10
+  Dexterity=10
+  Defense=10
+  Vitality=10
+  Perception=10
+  Intelligence=10
+  Level=1
+  Exp = 0
+  ExpNeeded = Level*100
+  Proficiency=Level*5
+  weaponName="Wooden Sword"
+  name="John"
+  ###
+  playerProficiency=Proficiency*.1
+  playerHealth=(playerHealth+(Vitality*10))+playerProficiency
+  playerDmgMdf=(Strength*.1)+playerProficiency
+  playerDefMdf=(Defense*.1)+playerProficiency
+  playerDodgeChance=(Dexterity*.1)+playerProficiency
+  playerIntuition=Perception
+  playerMgcMdf=Intelligence+playerProficiency
+
+print("Welcome to beta version 0.5.0!")
+print("Beta version 0.5.0 brings small bug fixes and the completed combat system")
+print("All options for every choice are now reachable with shortened inputs")
+print("Troll now has 3 riddle options you can encounter")
+print("All combats have been finished (except for Golem and Lich since they are bosses)")
+print("I hope you enjoy exploring the world as it is now!")
+print("-AUG__DOG")
+print(" ")
+
+def credits():
+  print("Lead Coder and Designer: AUG__DOG")
+  print("Playtester: Fabric, Nightingal3")
+
+def gameEnd():
+  print("So this is how it ends")
+  print("You had a good run")
+  print("")
+  initialize=4
+  print("Throughout your adventure you recovered ",hpGained," health")
+  print("")
+  credits()
+  exit()
+
+def tutorial():
+  print("Old man: Welcome brave adventurer")
+  response=input("Im assuming your here from the Guild assignment?")
+  print(" ")
+  if response=="yes" or response=="Yes":
+    print("Old man: Oh good")
+    print("The nearby town has been harassed for 2 weeks now")
+    print("We need someone to help us")
+    print(" ")
+    response1=input("Old man: Do you have any questions for me?")
+    if response1=="who are you?" or response1=="Who are you?":
+      print("")
+      print("Elder Gerald: I am Gerald")
+      print("The elder of a local village")
+      print("")
+    else:
+      if response1=="Why me?" or response1=="why me?":
+        print("")
+        print("Old man: Because im too old for this")
+        print("But you are young and full of youth")
+        print("")
+      else:
+        if response1=="where are we?" or response1=="Where are we?":
+          print("")
+          print("Old man: Im not sure")
+          print("I guess the developer is a lazy bum")
+          print("Who couldn't even spend the time to name my birthplace")
+          print("")
+        else:
+          if response1=="no" or response1=="No":
+            print("Ok then lets get you on your way")
+    print("Old man: Now, enough dillydallying")
+    print("Here is a sword, I pray you know how to use it")
+    print("")
+  else:
+    if response=="no" or response=="No":
+      print("Old man: oh")
+      print("Well I pray that you will heed my plea")
+      print("Monsters from this dungeon have been harassing local villages")
+      print("We need someone to help us")
+      print(" ")
+      response1=input("Old man: Do you have any questions for me?")
+      if response1=="who are you?" or response1=="Who are you?":
+        print("")
+        print("Elder Gerald: I am Gerald")
+        print("The elder of a local village")
+        print("")
+      else:
+        if response1=="Why me?" or response1=="why me?":
+          print("")
+          print("Old man: Because im too old for this")
+          print("But you are young and full of youth")
+          print("")
+        else:
+          if response1=="where are we?" or response1=="Where are we?":
+            print("")
+            print("Old man: Im not sure")
+            print("I guess the developer is a lazy piece of shit")
+            print("Who couldnt even spend the time to name my birthplace")
+            print("")
+      print("Old man: Now, enough dillydallying")
+      print("Here is a sword, I pray you know how to use it")
+      print("")
+  return
+
+start=" "
+start=input("Are you ready to start?")
+if start !=" ":
+  if start=="dev":
+    print("skipped")
+    print("")
+  else:
+    print("")
+    print("Welcome to The Dominion of Arkuneg")
+    print("")
+    tutorial()
+
+initialize=5
+
+combatState="False"
+
+
+class items:
+  class sword:
+    itemDamage=15
+    itemBlock=5
+    itemMagicDamage=3
+    itemID="Sword"
+    itemIDL="Hero's Holy Sword"
+  swordStat=sword()
+  class bow:
+    itemDamage=12
+    itemBlock=0
+    itemMagicDamage=1
+    itemID="Bow"
+    itemIDL="Elven Long Bow"
+  bowStat=bow()
+  class claymore:
+    itemDamage=20
+    itemBlock=8
+    itemMagicDamage=2
+    itemID="Claymore"
+    itemIDL="Ancient Great Sword"
+  claymoreStat=claymore()
+  class staff:
+    itemDamage=8
+    itemBlock=1
+    itemMagicDamage=10
+    itemID="Staff"
+    itemIDL="Jewel Encrusted Scepter"
+  staffStats=staff()
+  class dagger:
+    itemDamage=12
+    itemBlock=1
+    itemMagicDamage=4
+    itemID="Dagger"
+    itemIDL="Chipped Shortsword"
+  daggerStats=dagger()
+  class halbred:
+    itemDamage=18
+    itemBlock=10
+    itemMagicDamage=2
+    itemID="Halbred"
+    itemIDL="Knights Lance"
+  halbredStats=halbred()
+  class crossbow:
+    itemDamage=16
+    itemBlock=4
+    itemMagicDamage=0
+    itemID="Crossbow"
+    itemIDL="Legendary Bolt Thrower"
+  crossbowStats=crossbow()
+  class mace:
+    itemDamage=18
+    itemBlock=5
+    itemMagicDamage=4
+    itemID="Mace"
+    itemIDL="Bloodied Mace"
+  maceStats=mace()
+  class throwingSpear:
+    itemDamage=14
+    itemBlock=2
+    itemMagicDamage=2
+    itemID="Throwing Spear "
+    itemIDL="Spartan Javelin "
+  spearStats=throwingSpear()
+  class butterKnife:
+    itemDamage=8
+    itemBlock=1
+    itemMagicDamage=0
+    itemID="Butter Knife "
+    itemIDL="Biscuit Splitter "
+  knifeStats=butterKnife()
+  class spoon:
+    itemDamage=1
+    itemBlock=0
+    itemMagicDamage=30
+    itemID="Spoon"
+    itemIDL="Spoon of Destiny"
+  spoonStats=spoon()
+  class katana:
+    itemDamage=15
+    itemBlock=10
+    itemMagicDamage=5
+    itemID="Katana"
+    itemIDL="Legendary Samurais Blade"
+  katanaStats=katana()
+  class throwingAxe:
+    itemDamage=16
+    itemBlock=2
+    itemMagicDamage=4
+    itemID="Throwing Axe"
+    itemIDL="Viking Throwing Axe"
+  throwAxeStates=throwingAxe()
+  class warAxe:
+    itemDamage=18
+    itemBlock=6
+    itemMagicDamage=5
+    itemID="War Axe"
+    itemIDL="Viking War Axe"
+  warAxeStats=warAxe()
+  class greatAxe:
+    itemDamage=22
+    itemBlock=10
+    itemMagicDamage=8
+    itemID="Great Axe"
+    itemIDL="Viking Great Axe"
+  greatAxeStats=greatAxe()
+  
+itemList=items()
+weaponType=items
+
+class material:
+  class wooden:
+    damage=+5
+    block=+3
+    magicDamage=+6
+    itemID="Wooden "
+    itemIDL="Fire Hardened Wood "
+  woodenQuality=wooden()
+  class stone:
+    damage=+8
+    block=+5
+    magicDamage=+8
+    itemID="Stone "
+    itemIDL="Quartz Hardened Stone "
+  stoneQuality=stone()
+  class bronze:
+    damage=+10
+    block=+4
+    magicDamage=+5
+    itemID="Bronze "
+    itemIDL="Greek Bronze "
+  bronzeQuality=bronze()
+  class iron:
+    damage=+15
+    block=+7
+    magicDamage=+5
+    itemID="Iron "
+    itemIDL="Reinforced Iron "
+  ironQuality=iron()
+  class steel:
+    damage=+18
+    block=+6
+    magicDamage=+3
+    itemID="Steel "
+    itemIDL="Hardened Steel "
+  steelQuality=steel()
+  class mythril:
+    damage=+20
+    block=+10
+    magicDamage=+18
+    itemID="Mythril "
+    itemIDL="Compressed Mythril "
+  mythrilQuality=mythril()
+  class tungsten:
+    damage=+17
+    block=+8
+    magicDamage=+4
+    itemID="Tungsten "
+    itemIDL="Reinforced Tungsten "
+  tungstenQuality=tungsten()
+  class adamantium:
+    damage=+19
+    block=+9
+    magicDamage=+10
+    itemID="Adamantium "
+    itemIDL="Dwarven Adamantium "
+  adamantiumQuality=adamantium()
+  
+materialList=material()
+weaponMaterial=material()
+
+class attributes:
+  class broken:
+    dmgModifier=-(random.randrange(1,10))
+    blcModifier=-(random.randrange(1,10))
+    mgcModifier=+(random.randrange(1,2))
+    itemID="Broken "
+    itemIDL="Shattered "
+  brokenQuality=broken()
+  class hellforged:
+    dmgModifier=+(random.randrange(4,15))
+    blcModifier=+(random.randrange(4,15))
+    mgcModifier=+(random.randrange(2,10))
+    itemID="Hellforged "
+    itemIDL="Lavaforged "
+  hellforgedQuality=hellforged()
+  class thorn:
+    dmgModifier=+(random.randrange(2,12))
+    blcModifier=-(random.randrange(1,10))
+    mgcModifier=+(random.randrange(0,1))
+    itemID="Thorny "
+    itemIDL="Thorned "
+  thornQuality=thorn()
+  class silent:
+    dmgModifier=+(random.randrange(5,15))
+    blcModifier=-(random.randrange(3,10))
+    mgcModifier=-(random.randrange(1,5))
+    itemID="Silent "
+    itemIDL="Streamlined "
+  silentQuality=silent()
+  class rusty:
+    dmgModifier=+(random.randrange(2,6)-random.randrange(1,4))
+    blcModifier=-(random.randrange(4,10))
+    mgcModifier=-(random.randrange(1,2))
+    itemID="Rusty "
+    itemIDL="Bloodstained "
+  rustyQuality=rusty()
+  class blessed:
+    dmgModifier=+(random.randrange(1,6))
+    blcModifier=+(random.randrange(1,3))
+    mgcModifier=+(random.randrange(4,20))
+    itemID="Blessed "
+    itemIDL="Holy "
+  blessedQuality=blessed()
+
+attributesList=attributes()
+weaponAttribute=attributes()
+attributeChoice=[attributesList.hellforgedQuality,attributesList.thornQuality,attributesList.brokenQuality,attributesList.silentQuality,attributesList.rustyQuality,attributesList.blessedQuality]
+weaponChoice=[itemList.sword,itemList.bow,itemList.claymore,itemList.staff,itemList.dagger,itemList.halbred,itemList.crossbow,itemList.mace,itemList.throwingSpear,itemList.butterKnife,itemList.spoon,itemList.katana,itemList.throwingAxe,itemList.warAxe,itemList.greatAxe]
+materialChoice=[materialList.woodenQuality,materialList.stoneQuality,materialList.bronzeQuality,materialList.ironQuality,materialList.steelQuality,materialList.mythrilQuality,materialList.adamantiumQuality,materialList.tungstenQuality]
+legendaryName=["Arkuneg's","Josiahs's","Aug's","Belakor's","Art3mis's","Bob's","Lucifer's"]
+
+class startingWeapon():
+  equippedWeapon=materialList.wooden.itemID, itemList.sword.itemID
+  print("Your starting weapon is", equippedWeapon)
+  print("The items damage is", itemList.sword.itemDamage+materialList.wooden.damage)
+  print("The weapons block is", itemList.sword.itemBlock+materialList.wooden.block)
+  print("The weapons magic damage is", itemList.sword.itemMagicDamage)
+  print("")
+startingWeaponStats=startingWeapon()
+
+def weaponRandomizer():
+  weaponCounter=0
+  weaponCount=1
+  global itemAttack
+  global itemBlock
+  global itemMagic
+  global weaponID
+  global diceRollL
+  diceRollL=random.randrange(1,100)
+  while weaponCounter<weaponCount:
+    weaponMaterial=random.choice(materialChoice)
+    weaponAttribute=random.choice(attributeChoice)
+    weaponType=random.choice(weaponChoice)
+    if diceRollL>=98:
+      weaponID=legendaryName+weaponAttribute.itemIDL+weaponMaterial.itemIDL+weaponType.itemIDL
+      legendaryItem="True"
+    elif diceRollL<98:
+      weaponID=weaponAttribute.itemID+ weaponMaterial.itemID+ weaponType.itemID
+    itemAttack=(weaponType.itemDamage+weaponMaterial.damage+weaponAttribute.dmgModifier)
+    itemBlock=(weaponType.itemBlock+weaponMaterial.block+weaponAttribute.blcModifier) 
+    itemMagic=(weaponType.itemMagicDamage+weaponMaterial.magicDamage+weaponAttribute.mgcModifier)
+    print (weaponID)
+    if diceRollL>=98:
+      lgndMdf=+(random.randrange(8,40))
+      itemAttack=itemAttack+lgndMdf
+      itemBlock=itemBlock+lgndMdf
+      itemMagic=itemMagic+lgndMdf
+      print("The items damage is",)
+    print("The items damage is", itemAttack)
+    print("The items block is", itemBlock)
+    print("The items magic damage is", itemMagic)
+    weaponCounter=weaponCounter+1
+  return
+
+def equipNew():
+  global weaponAttack
+  global weaponBlock
+  global weaponMagic
+  global weaponName
+  weaponAttack=itemAttack
+  weaponBlock=itemBlock
+  weaponMagic=itemMagic
+  weaponName=weaponID
+  
+def equipNewStart():
+  global weaponAttack
+  global weaponBlock
+  global weaponMagic
+  global weaponName
+  weaponName="Old Wooden Sword"
+  weaponAttack=15
+  weaponBlock=5
+  weaponMagic=6
+  
+def equipNewLegen():
+  lgndMdf=+(random.randrange(8,40))
+  weaponAttack=itemAttack+lgndMdf
+  weaponBlock=itemBlock+lgndMdf
+  weaponMagic=itemMagic+lgndMdf
+  
+
+def lootGen():
+  print("You found a ")
+  weaponRandomizer()
+  if diceRollL>=98:
+      decision=str(input("Would you like to pick up this weapon? "))
+      if decision=="yes" or decision=="Yes":
+        print("You pickup the new weapon, it feels good as you toss it from hand to hand")
+        equipNewLegen()
+        print("")
+      elif decision=="no" or decision=="No":
+        print("You decide to leave it there")
+        print("")
+  elif diceRollL<98:
+    decision=str(input("Would you like to pick up this weapon? "))
+    if decision=="yes" or decision=="Yes":
+      print("You pickup the new weapon, it feels good as you toss it from hand to hand")
+      equipNew()
+      print("")
+    elif decision=="no" or decision=="No":
+      print("You decide to leave it there")
+      print("")
+  return
+
+def initialization():
+  global playerHealth
+  print("And one more thing adventurer")
+  name=input("Im afraid I didnt catch your name")
+  if name=="Sky" or "Sky":
+    print("Sky: Welcome back")
+    print("")
+  elif name=="Cocoa" or "cocoa" or "Viktor" or "viktor" or "Viktoria":
+    print("Sky: Welcome :3")
+    print("")
+  print("Old Man: Well then",name)
+  print("May the gods be in your favor")
+  print("")
+  equipNewStart()
+  return
+initialization()
+
+class enemies:
+  class zombie:
+    damage=10.0
+    health=20.0
+    armorClass=5.0
+    magicMdf=weaponMagic*1.2
+    itemID="Zombie"
+    exp = 20
+  zombieStats=zombie()
+  class skeleton:
+    damage=5.0
+    health=45.0
+    armorClass=15
+    magicMdf=weaponMagic*1.4
+    itemID="Skeleton"
+    exp = 20
+  skeletonStats=skeleton()
+  class spiderSwarm:
+    damage=1*(random.randrange(2,20))
+    health=damage
+    armorClass=0.0
+    magicMdf=weaponMagic*0.2
+    itemID="Spider Swarm"
+    exp = 35
+  spiderStats=spiderSwarm()
+  class spider:
+    damage=20
+    health=30
+    armorClass=0.0
+    magicMdf=weaponMagic*1.6
+    itemID="Spider"
+    exp = 35
+  class mimic:
+    damage=30.0
+    health=60.0
+    armorClass=10.0
+    magicMdf=weaponMagic*0.9
+    itemID="Mimic"
+    exp = 40
+  mimicStats=mimic()
+  class troll:
+    damage=50.0
+    health=120.0
+    armorClass=20.0
+    magicMdf=weaponMagic*1.5
+    itemID="Troll"
+    exp = 80
+  trollStats=troll()
+  class lich:
+    damage=35.0
+    health=200.0
+    armorClass=7.5
+    magicMdf=weaponMagic*2.0
+    itemID="Lich"
+    exp = 120
+  lichStats=lich()
+  class stoneGolem:
+    damage=75.0
+    health=350.0
+    armorClass=30.0
+    magicMdf=weaponMagic*1.8
+    itemID="Stone Golem"
+    exp = 150
+  stoneGolemStats=stoneGolem()
+enemyStats=enemies()
+
+def winCombat(enemy):
+    print("You Win!")
+    playerStats.Exp+=enemy.exp
+
+class combatLoops():
+  def comatLoopskele():
+    global playerHealth
+    enemyHealth=enemyStats.skeleton.health
+    enemyAttack=enemyStats.skeleton.damage
+    enemyArmor=enemyStats.skeleton.armorClass
+    enemyMgcRes=enemyStats.skeleton.magicMdf
+    enemyInitiative=random.randrange(1,20)
+    playerInitiative=random.randrange(1,20)
+    combatLoop="True"
+    while combatLoop=="True":
+      if enemyInitiative >= playerInitiative:
+        print("the skeleton swings at you")
+        enemyDamageDealt=enemyAttack-(0.9*weaponBlock)
+        if enemyDamageDealt<1:
+            enemyDamageDealt=1
+        print("The skeleton deals ",enemyDamageDealt," damage")
+        playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+        print("You now have ",playerStats.playerHealth, "health")
+        print("")
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("You strike back at the skeleton")
+          damageDealt=weaponAttack-(0.5*enemyArmor)
+          mgcDamageDealt=weaponMagic/enemyMgcRes
+          if damageDealt<1:
+            damageDealt=1
+          if mgcDamageDealt<1:
+            mgcDamageDealt=1
+          print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+          enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
+          if enemyHealth<=0:
+            combatLoop="False"
+            winCombat(enemyStats.skeleton)
+          decision=" "
+          decision=str(input("proceed?"))
+          print("")
+        if decision !=" ":
+          print("Continuing")
+          print("")
+      else:
+        print("You ready to attack the skeleton")
+        damageDealt=weaponAttack-(0.5*enemyArmor)
+        mgcDamageDealt=weaponMagic/(0.4*enemyMgcRes)
+        if damageDealt<1:
+          damageDealt=0
+        if mgcDamageDealt<1:
+          mgcDamageDealt=1
+        print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+        enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
+        if enemyHealth<=0:
+            combatLoop="False"
+            winCombat(enemyStats.skeleton)
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("the skeleton swings at you")
+          enemyDamageDealt=enemyAttack-(.2*weaponBlock)
+          print("The skeleton deals ",enemyDamageDealt," damage")
+          playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+          print("You now have ",playerStats.playerHealth, "health")
+          print("")
+      if playerStats.playerHealth<=0:
+        combatLoop="False"
+        gameEnd()
+      elif enemyHealth<=0:
+        combatLoop="False"
+        winCombat(enemyStats.skeleton)
+    return
+  def comatLoopZom():
+    global playerHealth
+    enemyHealth=enemyStats.zombie.health
+    enemyAttack=enemyStats.zombie.damage
+    enemyArmor=enemyStats.zombie.armorClass
+    enemyMgcRes=enemyStats.zombie.magicMdf
+    enemyInitiative=random.randrange(1,20)
+    playerInitiative=random.randrange(1,20)
+    combatLoop="True"
+    while combatLoop=="True":
+      if enemyInitiative >= playerInitiative:
+        print("the zombie swings at you")
+        enemyDamageDealt=enemyAttack-weaponBlock
+        print("The zombie deals ",enemyDamageDealt)
+        playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+        print("You now have ",playerStats.playerHealth, "health")
+        print("")
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("You strike back at the zombie")
+          damageDealt=weaponAttack-(0.5*enemyArmor)
+          mgcDamageDealt=weaponMagic/(0.5*enemyMgcRes)
+          if damageDealt<1:
+            damageDealt=0
+          if mgcDamageDealt<1:
+              mgcDamageDealt=1
+          print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+          enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
+          if enemyHealth<=0:
+            combatLoop="False"
+            winCombat(enemyStats.zombie)
+          decision=" "
+          decision=str(input("proceed?"))
+          print("")
+        if decision !=" ":
+          print("Continuing")
+          print("")
+      else:
+        print("You ready to attack the zombie")
+        damageDealt=weaponAttack-enemyArmor
+        mgcDamageDealt=weaponMagic/enemyMgcRes
+        if damageDealt<1:
+          damageDealt=0
+        if mgcDamageDealt<1:
+          mgcDamageDealt=1
+        print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+        enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
+        if enemyHealth<=0:
+            combatLoop="False"
+            winCombat(enemyStats.zombie)
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("the zombie swings at you")
+          enemyDamageDealt=enemyAttack-(.2*weaponBlock)
+          print("The zombie deals ",enemyDamageDealt," damage")
+          playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+          if playerStats.playerHealth==0:
+            combatLoop="False"
+            gameEnd()
+          print("You now have ",playerStats.playerHealth, "health")
+          print("")
+      if playerStats.playerHealth<=0:
+          combatLoop="False"
+          gameEnd()
+    return
+  def comatLoopmim():
+    global playerHealth
+    enemyHealth=enemyStats.mimic.health
+    enemyAttack=enemyStats.mimic.damage
+    enemyArmor=enemyStats.mimic.armorClass
+    enemyMgcRes=enemyStats.mimic.magicMdf
+    enemyInitiative=random.randrange(1,20)
+    playerInitiative=random.randrange(1,20)
+    combatLoop="True"
+    while combatLoop=="True":
+      if enemyInitiative >= playerInitiative:
+        print("the mimic bites at you")
+        enemyDamageDealt=enemyAttack-(0.9*weaponBlock)
+        if enemyDamageDealt<1:
+            enemyDamageDealt=1
+        print("The mimic deals ",enemyDamageDealt," damage")
+        playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+        print("You now have ",playerStats.playerHealth, "health")
+        print("")
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("You strike back at the mimic")
+          damageDealt=weaponAttack-(0.5*enemyArmor)
+          mgcDamageDealt=weaponMagic/enemyMgcRes
+          if damageDealt<1:
+            damageDealt=1
+          if mgcDamageDealt<1:
+            mgcDamageDealt=1
+          print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+          enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
+          if enemyHealth<=0:
+            combatLoop="False"
+            winCombat(enemyStats.mimic)
+          decision=" "
+          decision=str(input("proceed?"))
+          print("")
+        if decision !=" ":
+          print("Continuing")
+          print("")
+      else:
+        print("You ready to attack the mimic")
+        damageDealt=weaponAttack-(0.5*enemyArmor)
+        mgcDamageDealt=weaponMagic/(0.4*enemyMgcRes)
+        if damageDealt<1:
+          damageDealt=0
+        if mgcDamageDealt<1:
+          mgcDamageDealt=1
+        print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+        enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
+        if enemyHealth<=0:
+            combatLoop="False"
+            winCombat(enemyStats.mimic)
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("the mimic bites at you")
+          enemyDamageDealt=enemyAttack-(.2*weaponBlock)
+          print("The mimic deals ",enemyDamageDealt," damage")
+          playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+          print("You now have ",playerStats.playerHealth, "health")
+          print("")
+      if playerStats.playerHealth<=0:
+        combatLoop="False"
+        gameEnd()
+      elif enemyHealth<=0:
+        combatLoop="False"
+        winCombat(enemyStats.mimic)
+    return
+  def comatLooptroll():
+    global playerHealth
+    enemyHealth=enemyStats.troll.health
+    enemyAttack=enemyStats.troll.damage
+    enemyArmor=enemyStats.troll.armorClass
+    enemyMgcRes=enemyStats.troll.magicMdf
+    enemyInitiative=random.randrange(1,20)
+    playerInitiative=random.randrange(1,20)
+    combatLoop="True"
+    while combatLoop=="True":
+      if enemyInitiative >= playerInitiative:
+        print("the troll swings at you")
+        enemyDamageDealt=enemyAttack-(0.9*weaponBlock)
+        if enemyDamageDealt<1:
+            enemyDamageDealt=1
+        print("The troll deals ",enemyDamageDealt," damage")
+        playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+        print("You now have ",playerStats.playerHealth, "health")
+        print("")
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("You strike back at the troll")
+          damageDealt=weaponAttack-(0.5*enemyArmor)
+          mgcDamageDealt=weaponMagic/enemyMgcRes
+          if damageDealt<1:
+            damageDealt=1
+          if mgcDamageDealt<1:
+            mgcDamageDealt=1
+          print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+          enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
+          if enemyHealth<=0:
+            combatLoop="False"
+            winCombat(enemyStats.troll)
+          decision=" "
+          decision=str(input("proceed?"))
+          print("")
+        if decision !=" ":
+          print("Continuing")
+          print("")
+      else:
+        print("You ready to attack the troll")
+        damageDealt=weaponAttack-(0.5*enemyArmor)
+        mgcDamageDealt=weaponMagic/(0.4*enemyMgcRes)
+        if damageDealt<1:
+          damageDealt=0
+        if mgcDamageDealt<1:
+          mgcDamageDealt=1
+        print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+        enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
+        if enemyHealth<=0:
+            combatLoop="False"
+            winCombat(enemyStats.troll)
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("the troll swings at you")
+          enemyDamageDealt=enemyAttack-(.2*weaponBlock)
+          print("The troll deals ",enemyDamageDealt," damage")
+          playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+          print("You now have ",playerStats.playerHealth, "health")
+          print("")
+      if playerStats.playerHealth<=0:
+        combatLoop="False"
+        gameEnd()
+      elif enemyHealth<=0:
+        combatLoop="False"
+        winCombat(enemyStats.troll)
+    return
+  def comatLoopspiderSwarm():
+    global playerHealth
+    enemyHealth=enemyStats.spiderSwarm.health
+    enemyAttack=enemyStats.spiderSwarm.damage
+    enemyArmor=enemyStats.spiderSwarm.armorClass
+    enemyMgcRes=enemyStats.spiderSwarm.magicMdf
+    enemyInitiative=random.randrange(1,20)
+    playerInitiative=random.randrange(1,20)
+    combatLoop="True"
+    while combatLoop=="True":
+      if enemyInitiative >= playerInitiative:
+        print("the spiders bite at you")
+        enemyDamageDealt=enemyAttack-(0.9*weaponBlock)
+        if enemyDamageDealt<1:
+            enemyDamageDealt=1
+        print("The spiders deal ",enemyDamageDealt," damage")
+        playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+        print("You now have ",playerStats.playerHealth, "health")
+        print("")
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("You strike back at the spiders")
+          damageDealt=weaponAttack-(0.5*enemyArmor)
+          mgcDamageDealt=weaponMagic/enemyMgcRes
+          if damageDealt<1:
+            damageDealt=1
+          if mgcDamageDealt<1:
+            mgcDamageDealt=1
+          print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+          enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
+          if enemyHealth<=0:
+            combatLoop="False"
+            winCombat(enemyStats.spiderSwarm)
+          decision=" "
+          decision=str(input("proceed?"))
+          print("")
+        if decision !=" ":
+          print("Continuing")
+          print("")
+      else:
+        print("You ready to attack the spiders")
+        damageDealt=weaponAttack-(0.5*enemyArmor)
+        mgcDamageDealt=weaponMagic/(0.4*enemyMgcRes)
+        if damageDealt<1:
+          damageDealt=0
+        if mgcDamageDealt<1:
+          mgcDamageDealt=1
+        print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+        enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
+        if enemyHealth<=0:
+            combatLoop="False"
+            winCombat(enemyStats.spiderSwarm)
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("the spiders bite at you")
+          enemyDamageDealt=enemyAttack-(.2*weaponBlock)
+          print("The spiders deal ",enemyDamageDealt," damage")
+          playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+          print("You now have ",playerStats.playerHealth, "health")
+          print("")
+      if playerStats.playerHealth<=0:
+        combatLoop="False"
+        gameEnd()
+      elif enemyHealth<=0:
+        combatLoop="False"
+        winCombat(enemyStats.spiderSwarm)
+    return
+  def comatLoopspider():
+    global playerHealth
+    enemyHealth=enemyStats.spiderSwarm.health
+    enemyAttack=enemyStats.spiderSwarm.damage
+    enemyArmor=enemyStats.spiderSwarm.armorClass
+    enemyMgcRes=enemyStats.spiderSwarm.magicMdf
+    enemyInitiative=random.randrange(1,20)
+    playerInitiative=random.randrange(1,20)
+    combatLoop="True"
+    while combatLoop=="True":
+      if enemyInitiative >= playerInitiative:
+        print("the spider bites at you")
+        enemyDamageDealt=enemyAttack-(0.9*weaponBlock)
+        if enemyDamageDealt<1:
+            enemyDamageDealt=1
+        print("The spider deals ",enemyDamageDealt," damage")
+        playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+        print("You now have ",playerStats.playerHealth, "health")
+        print("")
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("You strike back at the spider")
+          damageDealt=weaponAttack-(0.5*enemyArmor)
+          mgcDamageDealt=weaponMagic/enemyMgcRes
+          if damageDealt<1:
+            damageDealt=1
+          if mgcDamageDealt<1:
+            mgcDamageDealt=1
+          print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+          enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
+          if enemyHealth<=0:
+            combatLoop="False"
+            winCombat(enemyStats.spider)
+          decision=" "
+          decision=str(input("proceed?"))
+          print("")
+        if decision !=" ":
+          print("Continuing")
+          print("")
+      else:
+        print("You ready to attack the spiders")
+        damageDealt=weaponAttack-(0.5*enemyArmor)
+        mgcDamageDealt=weaponMagic/(0.4*enemyMgcRes)
+        if damageDealt<1:
+          damageDealt=0
+        if mgcDamageDealt<1:
+          mgcDamageDealt=1
+        print("you deal ",damageDealt," normal damage and ",mgcDamageDealt," magic damage")
+        enemyHealth=enemyHealth-(damageDealt+mgcDamageDealt)
+        if enemyHealth<=0:
+            combatLoop="False"
+            winCombat(enemyStats.spider)
+        decision=" "
+        decision=str(input("proceed?"))
+        print("")
+        if decision !=" ":
+          print("the spider bites at you")
+          enemyDamageDealt=enemyAttack-(.2*weaponBlock)
+          print("The spider deals ",enemyDamageDealt," damage")
+          playerStats.playerHealth=playerStats.playerHealth-enemyDamageDealt
+          print("You now have ",playerStats.playerHealth, "health")
+          print("")
+      if playerStats.playerHealth<=0:
+        combatLoop="False"
+        gameEnd()
+      elif enemyHealth<=0:
+        combatLoop="False"
+        winCombat(enemyStats.spider)
+    return
+  def bossComatLoopstoneGolem():
+    print("Bossfight; Stone Golem")
+    print("")
+    return
+  def comatLooplich():
+    print("Lich")
+    print("")
+    return
+  
+def enterDun():
+  print("You walk away from the old man")
+  print("The grand doorway to the dungeon threatining to swallow you")
+  print("This is your last chance to walk away")
+  decision=input()
+  if decision=="leave" or decision=="Leave":
+    print("You decide to turn and run")
+    print("The old man raises his hand")
+    print("But stops himself from speaking")
+    print("")
+    gameEnd()
+  else:
+    if decision=="enter" or decision=="Enter":
+      print("You decide to delve into the dungeon")
+      print(" ")
+  return
+
+enterDun()
+
+def betweenRoom():
+  decision=" "
+  decision=input("Would you like to rest between rooms? ")
+  print(" ")
+  if decision=="yes" or decision=="Yes" or decision=="y" or decision=="Y":
+    print("You decide to stop and rest for a bit before moving on")
+    diceRoll=random.randrange(1,20)
+    if diceRoll>2:
+      decision2=input("Would you like to drink a health potion?")
+      if decision2=="yes" or decision2=="Yes" or decision2=="y" or decision2=="Y":
+        print("You drink a health potion")
+        healthRecovered=random.randrange(3,50)
+        print("You recover", healthRecovered, "health")
+        playerStats.playerHealth=playerStats.playerHealth+healthRecovered
+        decision3=str(input("Do you wish to check your inventory?"))
+        if decision3=="yes" or decision3=="Yes" or decision3=="y" or decision3=="Y" or decision3=="yeah":
+          print("You decide to check your equipment")
+          print(weaponName)
+          print("Your weapons attack is ",weaponAttack)
+          print("Your weapons block is ",weaponBlock)
+          print("And your weapons magic is ",weaponMagic)
+        elif decision3=="no" or decision3=="No" or decision3=="n" or decision3=="N":
+            print("You decide to move onto the next room")
+            print("")
+            return
+    elif diceRoll<3:
+      print("You hear bone rattling echoing throughout the halls")
+      print("You rush to your feet as skeletons round the corner")
+      print("")
+      combatLoops.comatLoopskele()
+      combatLoops.comatLoopskele()
+  else:
+    if decision=="no" or decision=="No" or decision=="n" or decision=="N":
+      print("You decide to move onto the next room")
+      print("")
+  return
+
+def worldGen():
+  roomSelector=["SkellyScare", "ZombieChamber","LootRoom","SpikeTrap","MimicRoom","TrollRiddle","spiderNest"]
+  archiveRooms=["LichCrypt"]
+  roomSelected=random.choice(roomSelector)
+  if roomSelected in roomSelector:
+    match roomSelected:
+      case "SkellyScare":
+        print("You enter a dark and dry room")
+        print("As you swing your torch around to illuminate the room")
+        print("You hear clacking as several skeletons rise from the ground, brandishing daggers")
+        print(" ")
+        combatLoops.comatLoopskele()
+        lootGen()
+        betweenRoom()
+      case "ZombieChamber":
+        print("Your nostrils are assaulted with a foul stench")
+        print("Suddenly an undead rises from the dust and attacks you")
+        print(" ")
+        combatLoops.comatLoopZom()
+        lootGen()
+        betweenRoom()
+      case "MimicRoom":
+        print("You enter into a large chamber")
+        print("You see a chest in the center of the room")
+        decision=input("Do you wish to approach the chest?")
+        print(" ")
+        diceRoll=random.randrange(1,20)
+        if decision=="yes" or decision=="Yes":
+          print("You decide to walk towards the chest")
+          print(" ")
+          if diceRoll>11:
+            print("You open the chest and find some loot")
+            lootGen()
+            betweenRoom()
+          elif diceRoll<12:
+            print("As you approach the chest springs to life and jumps at you")
+            combatLoops.comatLoopmim()
+        elif decision=="no" or decision=="No":
+          print("You decide to move on from this room")
+          print(" ")
+          betweenRoom()
+      case "SpikeTrap":
+        print("A rectangular room lies before you")
+        print(" ")
+        diceRoll=random.randrange(1,20)
+        if diceRoll>14:
+          print("You notice that some of the stone tiles on the floor appear to have gaps around them")
+          print("")
+          decision=" "
+          decision=input("Are you ready to proceed?")
+          if decision != " ":
+            print("You are able to avoid the trapped tiles and progress onto the next room")
+            print(" ")
+          lootGen()
+          betweenRoom()
+        elif diceRoll<15:
+          print("As you walk across the room, you suddenly feel your foot give")
+          print("As you look down at your foot you see that you triggered a trapped tile")
+          print("Suddenly you hear stone scraping on stone, as a spiked ceiling begins to fall")
+          decision=" "
+          decision=input("Are you ready to proceed?")
+          print(" ")
+          if decision !=" ":
+            diceRoll=random.randrange(1,20)
+            if diceRoll>15:
+              print("You manage to outrun the ceiling and escape the spike trap")
+              print("You stand up and dust yourself off, before proceeding to the next room")
+              print(" ")
+              lootGen()
+              betweenRoom()
+            elif diceRoll<16:
+              print("You attempt to outrun the trap")
+              print("However your leg is caught underneath a spike")
+              damageTaken=random.randrange(1,6)
+              print("You take ",damageTaken," damage")
+              playerStats.playerHealth=playerStats.playerHealth-damageTaken
+              print("You have ",playerStats.playerHealth," health")
+              print(" ")
+              lootGen()
+              betweenRoom()
+      case "LootRoom":
+        print("You enter into a large chamber")
+        print("You see a large chest in the center of the room")
+        decision=input("Do you wish to approach the chest?")
+        print(" ")
+        if decision=="yes" or decision=="Yes" or decision=="y" or decision=="Y":
+          print("You open it and find some loot")
+          lootGen()
+          betweenRoom()
+        elif decision=="No" or decision=="no" or decision=="n" or decision=="N":
+          print("You decide to pass by the room")
+          betweenRoom()
+      case "TrollRiddle":
+        riddleSelection=["River","Death"]
+        riddleSelected=random.choice(riddleSelection)
+        print (riddleSelected)
+        answer=""
+        print("You enter into a large cavern")
+        print("A troll sits on the other end guarding a gate")
+        print("The troll looks at you intently before speaking")
+        print("Troll: answer my riddle and you can pass")
+        print("Get it wrong and die")
+        print("")
+        proceed=" "
+        proceed=str(input("Proceed?"))
+        if proceed !=" ":
+          if riddleSelected=="River":
+            print("I run but never stop")
+            print("I have a bed but never sleep")
+            print("What am I?")
+            answer=str(input("Answer: "))
+            print("")
+            if answer=="a river" or answer=="A river" or answer=="A River" or answer=="river" or answer=="River":
+              print("Troll: Good job")
+              print("Lets hope we dont cross paths again")
+              print(" ")
+              lootGen()
+              betweenRoom()
+            else:
+              print("Troll: too bad")
+              print("I was looking forward to eating you")
+              combatLoops.comatLooptroll()
+              lootGen()
+              lootGen()
+              betweenRoom()
+          elif riddleSelected=="Ship":
+            print("I have weight in my belly")
+            print("Trees on my back")
+            print("And nails in my ribs")
+            print("With no feet to move with")
+            print("What am I?")
+            answer=str(input("Answer: "))
+            print(" ")
+            if (answer=="ship" or answer=="Ship" or answer=="A ship" or answer=="A Ship" or answer=="a Ship" or answer=="a ship"):
+              print("Troll: Good Job")
+              print("Let's hope we don't cross paths again")
+              lootGen()
+              betweenRoom()
+            else:
+              print("Troll: too bad")
+              print("I was looking forward to eating you")
+              combatLoops.comatLooptroll()
+              lootGen()
+              lootGen()
+              betweenRoom()
+          elif riddleSelected=="Death":
+            print("I am fast and sudden")
+            print("But I am too slow to not be undone")
+            print("What am I?")
+            print("")
+            answer=str(input("Answer: "))
+            if answer=="death" or answer=="Death":
+              print("Troll: Good job")
+              print("Lets hope we cont cross paths again")
+              lootGen()
+              betweenRoom()
+            else:
+              print("Troll: too bad")
+              print("I was looking forward to eating you")
+              combatLoops.comatLooptroll()
+              lootGen()
+              lootGen()
+              betweenRoom()
+      case "LichCrypt":
+        print("You enter a long room")
+        print("it reeks of rotting flesh")
+        print("as you move forward several skeletons start to rise from the floor")
+        combatLoops.comatLoopskele()
+        print("As the final skeleton drops dead, a tall figure appears behind you")
+        combatLoops.comatLoopLich()
+        betweenRoom()
+      case "SpiderNest":
+        print("A dark and dry room is ahead of you")
+        print("As you raise your torch you find many spiders staring back at you")
+        combatLoops.comatLoopspiderSwarm()
+        combatLoops.comatLoopspider()
+        betweenRoom()
+      case "GolemnBRoom":
+        print("A massive room lays before you")
+        print("Massive pillars line the walls")
+        print("At the end of the room a massive golem lays motionless,")
+        print("A horde of treasure lies behind him")
+  return
+
+def gameLoop():
+  worldGen()
+  return
+
+while initialize==5:
+  gameLoop()
