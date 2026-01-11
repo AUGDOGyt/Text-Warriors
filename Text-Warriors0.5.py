@@ -42,7 +42,7 @@ print(" ")
 
 def credits():
   print("Lead Coder and Designer: AUG__DOG")
-  print("Playtester: Fabric, Nightingal3")
+  print("Playtester: ")
 
 def gameEnd():
   print("So this is how it ends")
