@@ -42,7 +42,7 @@ print(" ")
 
 def credits():
   print("Lead Coder and Designer: AUG__DOG")
-  print("Playtester: ")
+  print("Playtester: Fabric, Nightingal3")
 
 def gameEnd():
   print("So this is how it ends")
@@ -356,7 +356,7 @@ weaponAttribute=attributes()
 attributeChoice=[attributesList.hellforgedQuality,attributesList.thornQuality,attributesList.brokenQuality,attributesList.silentQuality,attributesList.rustyQuality,attributesList.blessedQuality]
 weaponChoice=[itemList.sword,itemList.bow,itemList.claymore,itemList.staff,itemList.dagger,itemList.halbred,itemList.crossbow,itemList.mace,itemList.throwingSpear,itemList.butterKnife,itemList.spoon,itemList.katana,itemList.throwingAxe,itemList.warAxe,itemList.greatAxe]
 materialChoice=[materialList.woodenQuality,materialList.stoneQuality,materialList.bronzeQuality,materialList.ironQuality,materialList.steelQuality,materialList.mythrilQuality,materialList.adamantiumQuality,materialList.tungstenQuality]
-legendaryName=["Arkuneg's","Josiahs's","Aug's","Belakor's","Art3mis's","Bob's","Lucifer's"]
+legendaryName=["Arkuneg's ","Josiahs's ","Aug's ","Belakor's ","Art3mis's ","Bob's ","Lucifer's "]
 
 class startingWeapon():
   equippedWeapon=materialList.wooden.itemID, itemList.sword.itemID
@@ -380,10 +380,10 @@ def weaponRandomizer():
     weaponMaterial=random.choice(materialChoice)
     weaponAttribute=random.choice(attributeChoice)
     weaponType=random.choice(weaponChoice)
-    if diceRollL>=98:
-      weaponID=legendaryName+weaponAttribute.itemIDL+weaponMaterial.itemIDL+weaponType.itemIDL
+    if diceRollL>=96:
+      weaponID=random.choice(legendaryName)+weaponAttribute.itemIDL+weaponMaterial.itemIDL+weaponType.itemIDL
       legendaryItem="True"
-    elif diceRollL<98:
+    elif diceRollL<96:
       weaponID=weaponAttribute.itemID+ weaponMaterial.itemID+ weaponType.itemID
     itemAttack=(weaponType.itemDamage+weaponMaterial.damage+weaponAttribute.dmgModifier)
     itemBlock=(weaponType.itemBlock+weaponMaterial.block+weaponAttribute.blcModifier) 
@@ -537,6 +537,11 @@ enemyStats=enemies()
 def winCombat(enemy):
     print("You Win!")
     playerStats.Exp+=enemy.exp
+    if playerStats.Exp >= playerStats.ExpNeeded:
+      playerStats.Exp = 0
+      playerStats.Level += 1
+      print("You Leveled Up!")
+      print("You are now Level ", playerStats.Level,"!")
 
 class combatLoops():
   def comatLoopskele():
@@ -1006,7 +1011,7 @@ def betweenRoom():
         print("You recover", healthRecovered, "health")
         playerStats.playerHealth=playerStats.playerHealth+healthRecovered
         decision3=str(input("Do you wish to check your inventory?"))
-        if decision3=="yes" or decision3=="Yes" or decision3=="y" or decision3=="Y" or decision3=="yeah":
+        if decision3=="yes" or decision3=="Yes" or decision3=="ye" or decision3=="Yeah" or decision3=="yeah":
           print("You decide to check your equipment")
           print(weaponName)
           print("Your weapons attack is ",weaponAttack)
@@ -1055,7 +1060,7 @@ def worldGen():
         decision=input("Do you wish to approach the chest?")
         print(" ")
         diceRoll=random.randrange(1,20)
-        if decision=="yes" or decision=="Yes":
+        if decision=="yes" or decision=="Yes" or decision=="y" or decision=="Y":
           print("You decide to walk towards the chest")
           print(" ")
           if diceRoll>11:
@@ -1065,7 +1070,7 @@ def worldGen():
           elif diceRoll<12:
             print("As you approach the chest springs to life and jumps at you")
             combatLoops.comatLoopmim()
-        elif decision=="no" or decision=="No":
+        elif decision=="no" or decision=="No" or decision=="n" or decision=="N":
           print("You decide to move on from this room")
           print(" ")
           betweenRoom()
